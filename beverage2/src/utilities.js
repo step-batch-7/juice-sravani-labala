@@ -1,5 +1,10 @@
 const fs = require("fs");
 
+const getDate = function() {
+  let date = new Date();
+  return date.toLocaleString();
+};
+
 const isEmployeeIdPresent = function(transactionDetails, employeeId) {
   return Object.keys(transactionDetails).includes(employeeId);
 };
@@ -22,7 +27,8 @@ const writeTransactionDetails = function(path, transactionDetails) {
 };
 
 const createTransactionDetails = function(beverage, quantity) {
-  return { beverage: beverage, quantity: quantity, date: new Date() };
+  // return { beverage: beverage, quantity: quantity, date: new Date() };
+  return { beverage: beverage, quantity: quantity, date: getDate() };
 };
 
 const addNewTransaction = function(
@@ -56,7 +62,8 @@ const getStrigifiedOutput = function(data) {
     "\t\t" +
     data[2] +
     "\t\t" +
-    new Date();
+    //new Date();
+    getDate();
   return stringifiedData;
 };
 
@@ -142,3 +149,4 @@ exports.stringToNumber = stringToNumber;
 exports.splitByTab = splitByTab;
 exports.queryTransactionRecords = queryTransactionRecords;
 exports.queryStrigifiedOutput = queryStrigifiedOutput;
+exports.getDate = getDate;
