@@ -122,6 +122,11 @@ const queryStrigifiedOutput = function(employeeId, data) {
   return strigifiedData;
 };
 
+const isOdd = function(number) {
+  return number % 2;
+};
+
+exports.isOdd = isOdd;
 exports.isEmployeeIdPresent = isEmployeeIdPresent;
 exports.stringToObject = stringToObject;
 exports.objectToString = objectToString;
