@@ -2,4 +2,3 @@ node_modules/
 .nyc_output/
 src/checkUserInputs.js
 src/transaction.json
-.DS_Store
