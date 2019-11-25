@@ -12,6 +12,7 @@ let {
   isEmployeeIdPresent,
   stringToNumber,
   isOdd,
+  getDate,
   getQueryTransactionDetails,
   splitByTab,
   queryTransactionRecords,

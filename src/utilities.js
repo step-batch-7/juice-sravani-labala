@@ -27,8 +27,8 @@ const writeTransactionDetails = function(path, transactionDetails) {
 };
 
 const createTransactionDetails = function(beverage, quantity) {
-  // return { beverage: beverage, quantity: quantity, date: new Date() };
-  return { beverage: beverage, quantity: quantity, date: getDate() };
+   return { beverage: beverage, quantity: quantity, date: new Date() };
+  //return { beverage: beverage, quantity: quantity, date: getDate() };
 };
 
 const addNewTransaction = function(
@@ -45,7 +45,23 @@ const addNewTransaction = function(
   );
   return transactionDetails;
 };
-
+const getStrigifiedOutput = function(data) {
+  let stringifiedData = "Transaction Recorded:\n";
+  stringifiedData =
+    stringifiedData + "Employee ID, Beverage, Quantity, Date, Time\n";
+  stringifiedData =
+    stringifiedData +
+    data[0] +
+    ", " +
+    data[1] +
+    ", " +
+    data[2] +
+    ", " +
+    new Date();
+    //getDate();
+  return stringifiedData;
+};
+/*
 const getStrigifiedOutput = function(data) {
   let stringifiedData = "transaction recorded:\n";
   stringifiedData =
@@ -66,7 +82,7 @@ const getStrigifiedOutput = function(data) {
     getDate();
   return stringifiedData;
 };
-
+*/
 const sum = function(firstValue, secondValue) {
   return firstValue + secondValue;
 };
@@ -109,7 +125,25 @@ const queryTransactionRecords = function(data) {
   transactionDetails.pop();
   return { totalJuice: juiceRecords, transactionDetails: transactionDetails };
 };
-
+const queryStrigifiedOutput = function(employeeId, data) {
+  let detailsOfTransaction = data["transactionDetails"];
+  let strigifiedData = "Employee ID, Beverage, Quantity, Date, Time\n";
+  for (let index = 0; index < detailsOfTransaction.length; index++) {
+    strigifiedData =
+      strigifiedData +
+      employeeId +
+      ", " +
+      detailsOfTransaction[index][0] +
+      ", " +
+      detailsOfTransaction[index][1] +
+      ", " +
+      detailsOfTransaction[index][2] +
+      "\n";
+  }
+  strigifiedData = strigifiedData + "Total: " + data["totalJuice"] + " Juices";
+  return strigifiedData;
+};
+/*
 const queryStrigifiedOutput = function(employeeId, data) {
   let detailsOfTransaction = data["transactionDetails"];
   let strigifiedData = "employeeId\t" + "beverage\t" + "quantity\t" + "time\n";
@@ -125,10 +159,10 @@ const queryStrigifiedOutput = function(employeeId, data) {
       detailsOfTransaction[index][2] +
       "\n";
   }
-  strigifiedData = strigifiedData + "total juices:\t" + data["totalJuice"];
+  strigifiedData = strigifiedData + "Total juices:\t" + data["totalJuice"];
   return strigifiedData;
 };
-
+*/
 const isOdd = function(number) {
   return number % 2;
 };
