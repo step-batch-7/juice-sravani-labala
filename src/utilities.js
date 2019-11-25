@@ -95,7 +95,7 @@ const getQueryTransactionDetails = function(queryTransactionList, transaction) {
     "\t" +
     transaction["date"] +
     "\n";
-  queryTransactionList["totalSum"] += transaction["quantity"];
+  queryTransactionList["totalSum"] += transaction["quantity"] + " ";
   return queryTransactionList;
 };
 
@@ -117,7 +117,7 @@ const splitByTab = function(data) {
 const queryTransactionRecords = function(data) {
   let juiceRecords = data["totalSum"];
   let transactionDetails = data["transactionDetails"];
-  juiceRecords = juiceRecords.split("");
+  juiceRecords = juiceRecords.split(" ");
   juiceRecords = juiceRecords.map(stringToNumber);
   juiceRecords = juiceRecords.reduce(sum, 0);
   transactionDetails = transactionDetails.split("\n");

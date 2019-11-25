@@ -3,10 +3,10 @@ let {
   createTransactionDetails,
   sum,
   addNewTransaction,
-  // getStrigifiedOutput,
+   getStrigifiedOutput,
   getEmployeeTransaction,
-  // writeTransactionDetails,
-  //readTransactionDetails,
+   writeTransactionDetails,
+   readTransactionDetails,
   stringToObject,
   objectToString,
   isEmployeeIdPresent,
@@ -87,6 +87,15 @@ describe("getStrigifiedOutput", function() {
     );
   });
 });
+*/
+describe("getStrigifiedOutput", function() {
+  it("should concatenate all values of keys", function() {
+    let Details = [1,"orange",  2 ];
+    assert.deepStrictEqual(
+      getStrigifiedOutput(Details),'Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date, Time\n1, orange, 2, '+new Date()
+    );
+  });
+});
 
 describe("readTransactionDetails", function() {
   it("should return the contents present in the file in the form of the object", function() {
@@ -107,11 +116,11 @@ describe("writeTransactionDetails", function() {
         "./src/transaction.json",
         JSON.stringify(transactionDetails)
       ),
-      "transaction completed"
+      undefined
     );
   });
 });
-*/
+
 describe("stringToNumber", function() {
   it("should convert the strigified number to number", function() {
     assert.strictEqual(stringToNumber("5"), 5);
@@ -140,5 +149,47 @@ describe("addNewTransaction", function() {
         { beverage: "apple", quantity: 2, date: new Date() }
       ]
     });
+  });
+});
+describe("splitByTab", function() {
+  it("should split the content by tab", function() {
+    assert.deepStrictEqual(splitByTab("123\torange\t3"), [
+      "123",
+      "orange",
+      "3"
+    ]);
+  });
+});
+describe("getQueryTransactionDetails", function() {
+  it("should give all the transaction details as a single string format as well as number of juices", function() {
+    let details = [{ beverage: "apple", quantity: "2" ,date: "123"}];
+    assert.deepStrictEqual(
+      details.reduce(getQueryTransactionDetails, {
+        transactionDetails: "",
+        totalSum: 0
+      }),
+      { transactionDetails: "apple\t2\t123\n", totalSum: "02 " }
+    );
+  });
+});
+describe("queryTransactionRecords", function() {
+  let details = {
+    transactionDetails: "apple\t2\t123\n",
+    totalSum: "02 3 4 5 "
+  };
+  it("should return the total number of juices they have taken and transaction in formatted way", function() {
+    assert.deepStrictEqual(queryTransactionRecords(details), {
+      totalJuice: 14,
+      transactionDetails: [["apple", "2", "123"]]
+    });
+  });
+});
+describe("queryStrigifiedOutput", function() {
+  let details = { totalJuice: 14, transactionDetails: [["apple", "2", "123"]] };
+  it("should return all the transactions as a single string format", function() {
+    assert.strictEqual(
+      queryStrigifiedOutput(123, details),
+      "Employee ID, Beverage, Quantity, Date, Time\n123, apple, 2, 123\nTotal: 14 Juices"
+    );
   });
 });
