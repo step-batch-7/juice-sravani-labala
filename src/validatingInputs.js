@@ -30,7 +30,10 @@ const getConvertedInput = function(userArgs, date) {
   return convertedInputs;
 };
 
-const inputValidation = function(userInputs, path) {
+const inputValidation = function(userInputs, path, validityFlag) {
+  if (!validityFlag) {
+    return "request failed";
+  }
   let parsedInputs = getConvertedInput(userInputs, new Date());
   let operation = parsedInputs[0];
   let transactionDetails = parsedInputs[1];

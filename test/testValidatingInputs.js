@@ -6,8 +6,8 @@ const validations = require("./../src/validatingInputs");
 const {
   getObjectFromArray,
   getNumeric,
-  getConvertedInput,
-  inputValidation
+  getConvertedInput
+  // inputValidation
 } = validations;
 
 describe("getObjectFromArray", function() {

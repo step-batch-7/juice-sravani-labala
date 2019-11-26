@@ -11,10 +11,40 @@ let {
   getQueryTransactionDetails,
   splitByTab,
   queryTransactionRecords,
-  queryStrigifiedOutput
+  queryStrigifiedOutput,
+  isEqual,
+  isInclude,
+  isNumeric
 } = utilities;
 
 const assert = require("assert");
+
+describe("isInclude", function() {
+  it("should return true if the value is present in the array", function() {
+    assert.strictEqual(isInclude([1, 2], 2), true);
+  });
+  it("should return false if the value is not included in the array", function() {
+    assert.strictEqual(isInclude([1, 2], 3), false);
+  });
+});
+
+describe("isEqual", function() {
+  it("should return true if both the values are equal", function() {
+    assert.strictEqual(isEqual("1", "1"), true);
+  });
+  it("should return false if both values are not equal", function() {
+    assert.strictEqual(isEqual("1", 1), false);
+  });
+});
+
+describe("isNumeric", function() {
+  it("should return true if the value is string of numeric", function() {
+    assert.strictEqual(isNumeric(2), true);
+  });
+  it("should return false if the value is not numeric in the form of string", function() {
+    assert.strictEqual(isNumeric("2w"), false);
+  });
+});
 
 describe("isEmployeeIdPresent", function() {
   it("should return true if the employee is present in the list", function() {

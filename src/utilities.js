@@ -106,6 +106,21 @@ const isOdd = function(number) {
   return number % 2;
 };
 
+const isEqual = function(value1, value2) {
+  return value1 === value2;
+};
+
+const isInclude = function(array, value) {
+  return array.includes(value);
+};
+
+const isNumeric = function(value) {
+  return Number.isInteger(+value);
+};
+
+exports.isNumeric = isNumeric;
+exports.isEqual = isEqual;
+exports.isInclude = isInclude;
 exports.isOdd = isOdd;
 exports.isEmployeeIdPresent = isEmployeeIdPresent;
 exports.createTransactionDetails = createTransactionDetails;

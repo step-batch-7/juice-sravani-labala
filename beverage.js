@@ -1,9 +1,11 @@
-//const option = require("./src/inputValidation").option;
+const isInputsValid = require("./src/inputChecking").isInputsValid;
+
 const inputValidation = require("./src/validatingInputs").inputValidation;
 const main = function() {
   let userInputs = process.argv.slice(2);
   let path = "./juiceTransactionDetails.json";
-  // console.log(option(userInputs, path));
-  console.log(inputValidation(userInputs, path));
+  let validatyFlag = isInputsValid(userInputs);
+
+  console.log(inputValidation(userInputs, path, validatyFlag));
 };
 main();
