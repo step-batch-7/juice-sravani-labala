@@ -1,6 +1,6 @@
 const utilities = require("./utilities");
 let {
-  readTransactionDetails,
+  readFile,
   stringToObject,
   getEmployeeTransaction,
   queryTransactionRecords,
@@ -10,7 +10,7 @@ let {
 
 const queryTransaction = function(userInput, path) {
   let employeeId = userInput[2];
-  let transactionDetails = readTransactionDetails(path);
+  let transactionDetails = readFile(path);
   transactionDetails = stringToObject(transactionDetails);
   transactionDetails = getEmployeeTransaction(employeeId, transactionDetails);
   transactionDetails = transactionDetails.reduce(getQueryTransactionDetails, {

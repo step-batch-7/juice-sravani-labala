@@ -3,23 +3,25 @@ let {
   createTransactionDetails,
   sum,
   addNewTransaction,
-   getStrigifiedOutput,
+  getStrigifiedOutput,
   getEmployeeTransaction,
-   writeTransactionDetails,
-   readTransactionDetails,
+  writeFile,
+  readFile,
   stringToObject,
   objectToString,
   isEmployeeIdPresent,
   stringToNumber,
   isOdd,
-  getDate,
   getQueryTransactionDetails,
   splitByTab,
   queryTransactionRecords,
   queryStrigifiedOutput
 } = utilities;
+
 const assert = require("assert");
+
 const fs = require("fs");
+
 describe("isEmployeeIdPresent", function() {
   it("should return true if the employee is present in the list", function() {
     assert.strictEqual(isEmployeeIdPresent({ 1: "present" }, "1"), true);
@@ -28,6 +30,7 @@ describe("isEmployeeIdPresent", function() {
     assert.strictEqual(isEmployeeIdPresent({}, "1"), false);
   });
 });
+
 describe("stringToObject", function() {
   it("should convert string to object", function() {
     assert.deepStrictEqual(stringToObject('{"a":1}'), { a: 1 });
@@ -37,23 +40,6 @@ describe("stringToObject", function() {
 describe("objectToString", function() {
   it("should convert object to string", function() {
     assert.deepStrictEqual(objectToString({ a: 1 }), '{"a":1}');
-  });
-});
-
-describe("createTransactionDetails", function() {
-  it("should format the given Details to object", function() {
-    assert.deepStrictEqual(createTransactionDetails("orange", 2), {
-      beverage: "orange",
-      quantity: 2,
-      date: new Date()
-    });
-  });
-  it("should return an empty valued object if the Details is not given", function() {
-    assert.deepStrictEqual(createTransactionDetails(), {
-      beverage: undefined,
-      quantity: undefined,
-      date: new Date()
-    });
   });
 });
 
@@ -74,48 +60,23 @@ describe("getEmployeeTransactions", function() {
     assert.deepStrictEqual(getEmployeeTransaction("1", {}), []);
   });
 });
-/*
-describe("getStrigifiedOutput", function() {
-  it("should concatenate all values of keys", function() {
-    let Details = { beverage: "orange", quantity: 2, date: new Date() };
-    assert.deepStrictEqual(
-      getStrigifiedOutput({ transactionDetails: "", totalSum: 0 }, Details),
-      {
-        transactionDetails: "orange\t2" + new Date() + "\n",
-        totalSum: 2
-      }
-    );
-  });
-});
-*/
-describe("getStrigifiedOutput", function() {
-  it("should concatenate all values of keys", function() {
-    let Details = [1,"orange",  2 ];
-    assert.deepStrictEqual(
-      getStrigifiedOutput(Details),'Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date, Time\n1, orange, 2, '+new Date()
-    );
-  });
-});
 
-describe("readTransactionDetails", function() {
+describe("readFile", function() {
   it("should return the contents present in the file in the form of the object", function() {
     assert.deepStrictEqual(
-      readTransactionDetails("./src/transaction.json"),
+      readFile("./src/transaction.json"),
       fs.readFileSync("./src/transaction.json", "utf8")
     );
   });
 });
 
-describe("writeTransactionDetails", function() {
+describe("writeFile", function() {
   it("should write the given contents to the file in the form of string", function() {
     let transactionDetails = {
       1: [{ beverage: "apple", quantity: 2 }]
     };
     assert.strictEqual(
-      writeTransactionDetails(
-        "./src/transaction.json",
-        JSON.stringify(transactionDetails)
-      ),
+      writeFile("./src/transaction.json", JSON.stringify(transactionDetails)),
       undefined
     );
   });
@@ -135,22 +96,7 @@ describe("isOdd", function() {
     assert.strictEqual(isOdd(4), 0);
   });
 });
-describe("addNewTransaction", function() {
-  it("should add a new employ id to transaction data", function() {
-    assert.deepStrictEqual(addNewTransaction(1, "orange", 1, {}), {
-      1: [{ beverage: "orange", quantity: 1, date: new Date() }]
-    });
-  });
-  it("should update an existing employ id with given transactions", function() {
-    let data = { 1: [{ beverage: "orange", quantity: 1, date: "123" }] };
-    assert.deepStrictEqual(addNewTransaction("1", "apple", 2, data), {
-      1: [
-        { beverage: "orange", quantity: 1, date: "123" },
-        { beverage: "apple", quantity: 2, date: new Date() }
-      ]
-    });
-  });
-});
+
 describe("splitByTab", function() {
   it("should split the content by tab", function() {
     assert.deepStrictEqual(splitByTab("123\torange\t3"), [
@@ -160,9 +106,10 @@ describe("splitByTab", function() {
     ]);
   });
 });
+
 describe("getQueryTransactionDetails", function() {
   it("should give all the transaction details as a single string format as well as number of juices", function() {
-    let details = [{ beverage: "apple", quantity: "2" ,date: "123"}];
+    let details = [{ beverage: "apple", quantity: "2", date: "123" }];
     assert.deepStrictEqual(
       details.reduce(getQueryTransactionDetails, {
         transactionDetails: "",
@@ -172,6 +119,7 @@ describe("getQueryTransactionDetails", function() {
     );
   });
 });
+
 describe("queryTransactionRecords", function() {
   let details = {
     transactionDetails: "apple\t2\t123\n",
@@ -184,6 +132,7 @@ describe("queryTransactionRecords", function() {
     });
   });
 });
+
 describe("queryStrigifiedOutput", function() {
   let details = { totalJuice: 14, transactionDetails: [["apple", "2", "123"]] };
   it("should return all the transactions as a single string format", function() {
@@ -191,5 +140,54 @@ describe("queryStrigifiedOutput", function() {
       queryStrigifiedOutput(123, details),
       "Employee ID, Beverage, Quantity, Date, Time\n123, apple, 2, 123\nTotal: 14 Juices"
     );
+  });
+});
+
+describe("createTransactionDetails", function() {
+  it("should format the given Details to object", function() {
+    let date = "123";
+    assert.deepStrictEqual(createTransactionDetails("orange", 2, date), {
+      beverage: "orange",
+      quantity: 2,
+      date: date
+    });
+  });
+  it("should return an empty valued object if the Details is not given", function() {
+    assert.deepStrictEqual(createTransactionDetails(), {
+      beverage: undefined,
+      quantity: undefined,
+      date: undefined
+    });
+  });
+});
+
+describe("getStrigifiedOutput", function() {
+  let date = new Date();
+  it("should concatenate all values of keys", function() {
+    let Details = [1, "orange", 2, date];
+    assert.deepStrictEqual(
+      getStrigifiedOutput(Details),
+      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date, Time\n1, orange, 2, " +
+        date.toJSON()
+    );
+  });
+});
+
+describe("addNewTransaction", function() {
+  it("should add a new employ id to transaction data", function() {
+    let date = new Date();
+    assert.deepStrictEqual(addNewTransaction(1, "orange", 1, date, {}), {
+      1: [{ beverage: "orange", quantity: 1, date: date }]
+    });
+  });
+  it("should update an existing employ id with given transactions", function() {
+    let data = { 1: [{ beverage: "orange", quantity: 1, date: "123" }] };
+    let date = new Date();
+    assert.deepStrictEqual(addNewTransaction("1", "apple", 2, date, data), {
+      1: [
+        { beverage: "orange", quantity: 1, date: "123" },
+        { beverage: "apple", quantity: 2, date: date }
+      ]
+    });
   });
 });

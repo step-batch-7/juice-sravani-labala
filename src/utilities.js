@@ -1,12 +1,7 @@
 const fs = require("fs");
 
-const getDate = function() {
-  let date = new Date();
-  return date.toLocaleString();
-};
-
-const isEmployeeIdPresent = function(transactionDetails, employeeId) {
-  return Object.keys(transactionDetails).includes(employeeId);
+const isEmployeeIdPresent = function(transactionDatabase, employeeId) {
+  return Object.keys(transactionDatabase).includes(employeeId);
 };
 
 const stringToObject = function(stringifiedData) {
@@ -17,34 +12,35 @@ const objectToString = function(objectTypeData) {
   return JSON.stringify(objectTypeData);
 };
 
-const readTransactionDetails = function(path) {
-  let transactionDetails = fs.readFileSync(path, "utf8");
-  return transactionDetails;
+const readFile = function(path) {
+  let transactionDatabase = fs.readFileSync(path, "utf8");
+  return transactionDatabase;
 };
 
-const writeTransactionDetails = function(path, transactionDetails) {
-  fs.writeFileSync(path, transactionDetails, "utf8");
+const writeFile = function(path, transactionDatabase) {
+  fs.writeFileSync(path, transactionDatabase, "utf8");
 };
 
-const createTransactionDetails = function(beverage, quantity) {
-   return { beverage: beverage, quantity: quantity, date: new Date() };
-  //return { beverage: beverage, quantity: quantity, date: getDate() };
+const createTransactionDetails = function(beverage, quantity, date) {
+  return { beverage: beverage, quantity: quantity, date: date };
 };
 
 const addNewTransaction = function(
   employeeId,
   beverage,
   quantity,
-  transactionDetails
+  date,
+  transactionDatabase
 ) {
-  if (!isEmployeeIdPresent(transactionDetails, employeeId)) {
-    transactionDetails[employeeId] = [];
+  if (!isEmployeeIdPresent(transactionDatabase, employeeId)) {
+    transactionDatabase[employeeId] = [];
   }
-  transactionDetails[employeeId].push(
-    createTransactionDetails(beverage, quantity)
+  transactionDatabase[employeeId].push(
+    createTransactionDetails(beverage, quantity, date)
   );
-  return transactionDetails;
+  return transactionDatabase;
 };
+
 const getStrigifiedOutput = function(data) {
   let stringifiedData = "Transaction Recorded:\n";
   stringifiedData =
@@ -57,32 +53,10 @@ const getStrigifiedOutput = function(data) {
     ", " +
     data[2] +
     ", " +
-    new Date();
-    //getDate();
+    data[3].toJSON();
   return stringifiedData;
 };
-/*
-const getStrigifiedOutput = function(data) {
-  let stringifiedData = "transaction recorded:\n";
-  stringifiedData =
-    stringifiedData +
-    "employeeId\t" +
-    "beverage\t" +
-    "quantity\t" +
-    "date and time\n";
-  stringifiedData =
-    stringifiedData +
-    data[0] +
-    "\t\t" +
-    data[1] +
-    "\t\t" +
-    data[2] +
-    "\t\t" +
-    //new Date();
-    getDate();
-  return stringifiedData;
-};
-*/
+
 const sum = function(firstValue, secondValue) {
   return firstValue + secondValue;
 };
@@ -117,7 +91,9 @@ const splitByTab = function(data) {
 const queryTransactionRecords = function(data) {
   let juiceRecords = data["totalSum"];
   let transactionDetails = data["transactionDetails"];
+  console.log(juiceRecords);
   juiceRecords = juiceRecords.split(" ");
+  juiceRecords.pop();
   juiceRecords = juiceRecords.map(stringToNumber);
   juiceRecords = juiceRecords.reduce(sum, 0);
   transactionDetails = transactionDetails.split("\n");
@@ -125,6 +101,7 @@ const queryTransactionRecords = function(data) {
   transactionDetails.pop();
   return { totalJuice: juiceRecords, transactionDetails: transactionDetails };
 };
+
 const queryStrigifiedOutput = function(employeeId, data) {
   let detailsOfTransaction = data["transactionDetails"];
   let strigifiedData = "Employee ID, Beverage, Quantity, Date, Time\n";
@@ -143,26 +120,7 @@ const queryStrigifiedOutput = function(employeeId, data) {
   strigifiedData = strigifiedData + "Total: " + data["totalJuice"] + " Juices";
   return strigifiedData;
 };
-/*
-const queryStrigifiedOutput = function(employeeId, data) {
-  let detailsOfTransaction = data["transactionDetails"];
-  let strigifiedData = "employeeId\t" + "beverage\t" + "quantity\t" + "time\n";
-  for (let index = 0; index < detailsOfTransaction.length; index++) {
-    strigifiedData =
-      strigifiedData +
-      employeeId +
-      "\t\t" +
-      detailsOfTransaction[index][0] +
-      "\t\t" +
-      detailsOfTransaction[index][1] +
-      "\t\t" +
-      detailsOfTransaction[index][2] +
-      "\n";
-  }
-  strigifiedData = strigifiedData + "Total juices:\t" + data["totalJuice"];
-  return strigifiedData;
-};
-*/
+
 const isOdd = function(number) {
   return number % 2;
 };
@@ -171,8 +129,8 @@ exports.isOdd = isOdd;
 exports.isEmployeeIdPresent = isEmployeeIdPresent;
 exports.stringToObject = stringToObject;
 exports.objectToString = objectToString;
-exports.readTransactionDetails = readTransactionDetails;
-exports.writeTransactionDetails = writeTransactionDetails;
+exports.readFile = readFile;
+exports.writeFile = writeFile;
 exports.createTransactionDetails = createTransactionDetails;
 exports.addNewTransaction = addNewTransaction;
 exports.getStrigifiedOutput = getStrigifiedOutput;
@@ -183,4 +141,3 @@ exports.stringToNumber = stringToNumber;
 exports.splitByTab = splitByTab;
 exports.queryTransactionRecords = queryTransactionRecords;
 exports.queryStrigifiedOutput = queryStrigifiedOutput;
-exports.getDate = getDate;
