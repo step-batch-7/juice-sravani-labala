@@ -1,24 +1,5 @@
-const fs = require("fs");
-
 const isEmployeeIdPresent = function(transactionDatabase, employeeId) {
   return Object.keys(transactionDatabase).includes(employeeId);
-};
-
-const stringToObject = function(stringifiedData) {
-  return JSON.parse(stringifiedData);
-};
-
-const objectToString = function(objectTypeData) {
-  return JSON.stringify(objectTypeData);
-};
-
-const readFile = function(path) {
-  let transactionDatabase = fs.readFileSync(path, "utf8");
-  return transactionDatabase;
-};
-
-const writeFile = function(path, transactionDatabase) {
-  fs.writeFileSync(path, transactionDatabase, "utf8");
 };
 
 const createTransactionDetails = function(beverage, quantity, date) {
@@ -53,7 +34,7 @@ const getStrigifiedOutput = function(data) {
     ", " +
     data[2] +
     ", " +
-    data[3].toJSON();
+    data[3];
   return stringifiedData;
 };
 
@@ -91,7 +72,7 @@ const splitByTab = function(data) {
 const queryTransactionRecords = function(data) {
   let juiceRecords = data["totalSum"];
   let transactionDetails = data["transactionDetails"];
-  console.log(juiceRecords);
+
   juiceRecords = juiceRecords.split(" ");
   juiceRecords.pop();
   juiceRecords = juiceRecords.map(stringToNumber);
@@ -127,10 +108,6 @@ const isOdd = function(number) {
 
 exports.isOdd = isOdd;
 exports.isEmployeeIdPresent = isEmployeeIdPresent;
-exports.stringToObject = stringToObject;
-exports.objectToString = objectToString;
-exports.readFile = readFile;
-exports.writeFile = writeFile;
 exports.createTransactionDetails = createTransactionDetails;
 exports.addNewTransaction = addNewTransaction;
 exports.getStrigifiedOutput = getStrigifiedOutput;

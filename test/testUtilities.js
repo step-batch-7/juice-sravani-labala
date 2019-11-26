@@ -5,10 +5,6 @@ let {
   addNewTransaction,
   getStrigifiedOutput,
   getEmployeeTransaction,
-  writeFile,
-  readFile,
-  stringToObject,
-  objectToString,
   isEmployeeIdPresent,
   stringToNumber,
   isOdd,
@@ -20,26 +16,12 @@ let {
 
 const assert = require("assert");
 
-const fs = require("fs");
-
 describe("isEmployeeIdPresent", function() {
   it("should return true if the employee is present in the list", function() {
     assert.strictEqual(isEmployeeIdPresent({ 1: "present" }, "1"), true);
   });
   it("should return false if the employee is not present in the list", function() {
     assert.strictEqual(isEmployeeIdPresent({}, "1"), false);
-  });
-});
-
-describe("stringToObject", function() {
-  it("should convert string to object", function() {
-    assert.deepStrictEqual(stringToObject('{"a":1}'), { a: 1 });
-  });
-});
-
-describe("objectToString", function() {
-  it("should convert object to string", function() {
-    assert.deepStrictEqual(objectToString({ a: 1 }), '{"a":1}');
   });
 });
 
@@ -58,27 +40,6 @@ describe("getEmployeeTransactions", function() {
   });
   it("should return an empty array if the employee id is not there", function() {
     assert.deepStrictEqual(getEmployeeTransaction("1", {}), []);
-  });
-});
-
-describe("readFile", function() {
-  it("should return the contents present in the file in the form of the object", function() {
-    assert.deepStrictEqual(
-      readFile("./src/transaction.json"),
-      fs.readFileSync("./src/transaction.json", "utf8")
-    );
-  });
-});
-
-describe("writeFile", function() {
-  it("should write the given contents to the file in the form of string", function() {
-    let transactionDetails = {
-      1: [{ beverage: "apple", quantity: 2 }]
-    };
-    assert.strictEqual(
-      writeFile("./src/transaction.json", JSON.stringify(transactionDetails)),
-      undefined
-    );
   });
 });
 
@@ -164,7 +125,7 @@ describe("createTransactionDetails", function() {
 describe("getStrigifiedOutput", function() {
   let date = new Date();
   it("should concatenate all values of keys", function() {
-    let Details = [1, "orange", 2, date];
+    let Details = [1, "orange", 2, date.toJSON()];
     assert.deepStrictEqual(
       getStrigifiedOutput(Details),
       "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date, Time\n1, orange, 2, " +
