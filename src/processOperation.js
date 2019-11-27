@@ -33,7 +33,14 @@ const getConvertedInput = function(userArgs, date) {
   return convertedInputs;
 };
 
-const inputValidation = function(userInputs, path, validityFlag) {
+const inputValidation = function(
+  userInputs,
+  path,
+  validityFlag,
+  isFileExist,
+  readFile,
+  writeFile
+) {
   let messageFormatter = {
     "--save": saveMessageFormatter,
     "--query": queryMessageFormatter
@@ -45,7 +52,13 @@ const inputValidation = function(userInputs, path, validityFlag) {
   let parsedInputs = getConvertedInput(userInputs, new Date());
   let operation = parsedInputs[0];
   let transactionDetails = parsedInputs[1];
-  let operationOutput = operation(transactionDetails, path);
+  let operationOutput = operation(
+    transactionDetails,
+    path,
+    isFileExist,
+    readFile,
+    writeFile
+  );
   return messageFormatter[option](operationOutput);
 };
 

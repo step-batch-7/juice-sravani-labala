@@ -2,6 +2,9 @@ const assert = require("assert");
 const save = require("./../src/saveTransaction");
 let { saveTransaction, saveMessageFormatter } = save;
 
+const fileAccess = require("./../src/fileAccessUtility");
+let { readFile, writeFile, isFileExist } = fileAccess;
+
 describe("saveTransaction", function() {
   it("should add the new transaction to the existing transaction", function() {
     let expected = {
@@ -18,7 +21,10 @@ describe("saveTransaction", function() {
           "--qty": "2",
           "--date": new Date().toJSON()
         },
-        "./test/testingTransactionFileForSave.json"
+        "./test/testingTransactionFileForSave.json",
+        isFileExist,
+        readFile,
+        writeFile
       ),
       expected
     );

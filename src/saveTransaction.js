@@ -4,8 +4,8 @@ let { addNewTransaction, createTransactionDetails } = utilities;
 const jsonUtilities = require("./jsonUtiities");
 let { objectToString, stringToObject } = jsonUtilities;
 
-const fileAccess = require("./fileAccessUtility");
-let { readFile, writeFile } = fileAccess;
+//const fileAccess = require("./fileAccessUtility");
+//let { readFile, writeFile, isFileExist } = fileAccess;
 
 const saveMessageFormatter = function(data) {
   let stringifiedData = "Transaction Recorded:\n";
@@ -23,14 +23,22 @@ const saveMessageFormatter = function(data) {
   return stringifiedData;
 };
 
-const saveTransaction = function(userInputs, path) {
+const saveTransaction = function(
+  userInputs,
+  path,
+  isFileExist,
+  readFile,
+  writeFile
+) {
   let employeeId = userInputs["--empId"];
   let beverage = userInputs["--beverage"];
   let quantity = userInputs["--qty"];
   let date = userInputs["--date"];
-
-  let transactionFile = readFile(path);
-  let transactionDatabase = stringToObject(transactionFile);
+  let transactionDatabase = {};
+  if (isFileExist(path)) {
+    let transactionFile = readFile(path);
+    transactionDatabase = stringToObject(transactionFile);
+  }
   addNewTransaction(employeeId, beverage, quantity, date, transactionDatabase);
   transactionDatabase = objectToString(transactionDatabase);
   writeFile(path, transactionDatabase);

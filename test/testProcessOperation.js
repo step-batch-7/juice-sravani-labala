@@ -1,6 +1,9 @@
 const assert = require("assert");
 const save = require("../src/saveTransaction").saveTransaction;
 
+const fileAccess = require("./../src/fileAccessUtility");
+let { readFile, writeFile, isFileExist } = fileAccess;
+
 const validations = require("../src/processOperation");
 
 const {
@@ -12,14 +15,20 @@ const {
 
 describe("inputValidation", function() {
   it("should return 'request failed' if the inputs are not valid", function() {
-    assert.strictEqual(inputValidation([], "", false), "request failed");
+    assert.strictEqual(
+      inputValidation([], "", false, isFileExist, readFile, writeFile),
+      "request failed"
+    );
   });
   it("should return the message formatted for the operation if the inputs are valid", function() {
     assert.strictEqual(
       inputValidation(
         ["--query", "--empId", "1"],
         "./test/testingTransactionFileQuery.json",
-        true
+        true,
+        isFileExist,
+        readFile,
+        writeFile
       ),
       "Employee ID, Beverage, Quantity, Date, Time\n1, apple, 2, 01-01-2019\nTotal: 2 Juices"
     );

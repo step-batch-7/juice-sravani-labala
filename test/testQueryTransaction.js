@@ -7,9 +7,11 @@ let {
   queryMessageFormatter
 } = query;
 
+const fileAccess = require("./../src/fileAccessUtility");
+let { readFile, isFileExist } = fileAccess;
+
 describe("queryTransaction", function() {
   it("should give the empid transaction details if it is present", function() {
-    "Employee ID, Beverage, Quantity, Date, Time\n1, apple, 2, 01-01-2019\nTotal: 2 Juices";
     let expected = [
       "1",
       { totalJuice: 2, transactionDetails: [["apple", "2", "01-01-2019"]] }
@@ -17,7 +19,9 @@ describe("queryTransaction", function() {
     assert.deepStrictEqual(
       queryTransaction(
         { "--empId": "1" },
-        "./test/testingTransactionFileQuery.json"
+        "./test/testingTransactionFileQuery.json",
+        isFileExist,
+        readFile
       ),
       expected
     );

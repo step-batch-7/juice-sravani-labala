@@ -4,8 +4,8 @@ let { getEmployeeTransaction, stringToNumber, sum, splitByTab } = utilities;
 const jsonUtilities = require("./jsonUtiities");
 let { stringToObject } = jsonUtilities;
 
-const fileAccess = require("./fileAccessUtility");
-let { readFile } = fileAccess;
+//const fileAccess = require("./fileAccessUtility");
+//let { readFile, isFileExist } = fileAccess;
 
 const getQueryTransactionDetails = function(queryTransactionList, transaction) {
   queryTransactionList["transactionDetails"] +=
@@ -34,6 +34,9 @@ const queryTransactionRecords = function(data) {
 };
 
 const queryMessageFormatter = function(transactionDetails) {
+  if (!transactionDetails) {
+    return "records not found";
+  }
   let employeeId = transactionDetails[0];
   let data = transactionDetails[1];
   let detailsOfTransaction = data["transactionDetails"];
@@ -54,9 +57,11 @@ const queryMessageFormatter = function(transactionDetails) {
   return strigifiedData;
 };
 
-const queryTransaction = function(userInput, path) {
+const queryTransaction = function(userInput, path, isFileExist, readFile) {
   let employeeId = userInput["--empId"];
-
+  if (!isFileExist(path)) {
+    return 0;
+  }
   let transactionFile = readFile(path);
   let transactionDatabase = stringToObject(transactionFile);
   let currentEmployeeTransactions = getEmployeeTransaction(
