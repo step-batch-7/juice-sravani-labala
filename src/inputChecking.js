@@ -1,5 +1,5 @@
 const utilities = require("./utilities");
-const { isEqual, isInclude, isNumeric } = utilities;
+const { isEqual, isInclude, isNumeric, isPositiveNumeric } = utilities;
 
 const isInputsValid = function(userInputs) {
   let operation = userInputs[0];
@@ -26,9 +26,9 @@ const isInputsValid = function(userInputs) {
   let indexOfBeverage = userInputs.indexOf("--beverage");
   let indexOfQuantity = userInputs.indexOf("--qty");
 
-  let isEmpIdValid = isNumeric(userInputs[indexOfEmpId + 1]);
+  let isEmpIdValid = isPositiveNumeric(userInputs[indexOfEmpId + 1]);
+  let isQuantityValid = isPositiveNumeric(userInputs[indexOfQuantity + 1]);
   let isBeverageValid = !isNumeric(userInputs[indexOfBeverage + 1]);
-  let isQuantityValid = isNumeric(userInputs[indexOfQuantity + 1]);
 
   let saveFlag =
     isOperationSave &&

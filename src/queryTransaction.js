@@ -1,10 +1,5 @@
 const utilities = require("./utilities");
-let {
-  getEmployeeTransaction,
-  queryTransactionRecords,
-  queryStrigifiedOutput,
-  getQueryTransactionDetails
-} = utilities;
+let { getEmployeeTransaction, stringToNumber, sum, splitByTab } = utilities;
 
 const jsonUtilities = require("./jsonUtiities");
 let { stringToObject } = jsonUtilities;
@@ -12,8 +7,54 @@ let { stringToObject } = jsonUtilities;
 const fileAccess = require("./fileAccessUtility");
 let { readFile } = fileAccess;
 
+const getQueryTransactionDetails = function(queryTransactionList, transaction) {
+  queryTransactionList["transactionDetails"] +=
+    transaction["beverage"] +
+    "\t" +
+    transaction["quantity"] +
+    "\t" +
+    transaction["date"] +
+    "\n";
+  queryTransactionList["totalSum"] += transaction["quantity"] + " ";
+  return queryTransactionList;
+};
+
+const queryTransactionRecords = function(data) {
+  let juiceRecords = data["totalSum"];
+  let transactionDetails = data["transactionDetails"];
+
+  juiceRecords = juiceRecords.split(" ");
+  juiceRecords.pop();
+  juiceRecords = juiceRecords.map(stringToNumber);
+  juiceRecords = juiceRecords.reduce(sum, 0);
+  transactionDetails = transactionDetails.split("\n");
+  transactionDetails = transactionDetails.map(splitByTab);
+  transactionDetails.pop();
+  return { totalJuice: juiceRecords, transactionDetails: transactionDetails };
+};
+
+const queryMessageFormatter = function(transactionDetails) {
+  let employeeId = transactionDetails[0];
+  let data = transactionDetails[1];
+  let detailsOfTransaction = data["transactionDetails"];
+  let strigifiedData = "Employee ID, Beverage, Quantity, Date, Time\n";
+  for (let index = 0; index < detailsOfTransaction.length; index++) {
+    strigifiedData =
+      strigifiedData +
+      employeeId +
+      ", " +
+      detailsOfTransaction[index][0] +
+      ", " +
+      detailsOfTransaction[index][1] +
+      ", " +
+      detailsOfTransaction[index][2] +
+      "\n";
+  }
+  strigifiedData = strigifiedData + "Total: " + data["totalJuice"] + " Juices";
+  return strigifiedData;
+};
+
 const queryTransaction = function(userInput, path) {
-  //let employeeId = userInput[2];
   let employeeId = userInput["--empId"];
 
   let transactionFile = readFile(path);
@@ -30,8 +71,10 @@ const queryTransaction = function(userInput, path) {
     }
   );
   let records = queryTransactionRecords(concattedEmployeeTransactions);
-  let messageFormatted = queryStrigifiedOutput(employeeId, records);
-  return messageFormatted;
+  return [employeeId, records];
 };
 
 exports.queryTransaction = queryTransaction;
+exports.queryMessageFormatter = queryMessageFormatter;
+exports.getQueryTransactionDetails = getQueryTransactionDetails;
+exports.queryTransactionRecords = queryTransactionRecords;

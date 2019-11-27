@@ -1,6 +1,6 @@
 const isInputsValid = require("./src/inputChecking").isInputsValid;
 
-const inputValidation = require("./src/validatingInputs").inputValidation;
+const inputValidation = require("./src/processOperation").inputValidation;
 const main = function() {
   let userInputs = process.argv.slice(2);
   let path = "./juiceTransactionDetails.json";

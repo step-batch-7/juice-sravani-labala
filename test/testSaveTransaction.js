@@ -1,11 +1,16 @@
 const assert = require("assert");
-const saveTransaction = require("./../src/saveTransaction").saveTransaction;
+const save = require("./../src/saveTransaction");
+let { saveTransaction, saveMessageFormatter } = save;
+
 describe("saveTransaction", function() {
   it("should add the new transaction to the existing transaction", function() {
-    let expected =
-      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date, Time\n1, apple, 2, " +
-      new Date().toJSON();
-    assert.strictEqual(
+    let expected = {
+      beverage: "apple",
+      date: new Date().toJSON(),
+      empId: "1",
+      qty: "2"
+    };
+    assert.deepStrictEqual(
       saveTransaction(
         {
           "--empId": "1",
@@ -16,6 +21,18 @@ describe("saveTransaction", function() {
         "./test/testingTransactionFileForSave.json"
       ),
       expected
+    );
+  });
+});
+
+describe("saveMessageFormatter", function() {
+  let date = new Date();
+  it("should concatenate all values of keys", function() {
+    let Details = { empId: 1, beverage: "orange", qty: 2, date: date.toJSON() };
+    assert.deepStrictEqual(
+      saveMessageFormatter(Details),
+      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date, Time\n1, orange, 2, " +
+        date.toJSON()
     );
   });
 });

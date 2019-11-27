@@ -1,5 +1,8 @@
 const saveTransaction = require("./saveTransaction").saveTransaction;
+const queryMessageFormatter = require("./queryTransaction")
+  .queryMessageFormatter;
 const queryTransaction = require("./queryTransaction").queryTransaction;
+const saveMessageFormatter = require("./saveTransaction").saveMessageFormatter;
 
 const getObjectFromArray = function(array) {
   const length = array.length;
@@ -31,13 +34,19 @@ const getConvertedInput = function(userArgs, date) {
 };
 
 const inputValidation = function(userInputs, path, validityFlag) {
+  let messageFormatter = {
+    "--save": saveMessageFormatter,
+    "--query": queryMessageFormatter
+  };
   if (!validityFlag) {
     return "request failed";
   }
+  let option = userInputs[0];
   let parsedInputs = getConvertedInput(userInputs, new Date());
   let operation = parsedInputs[0];
   let transactionDetails = parsedInputs[1];
-  return operation(transactionDetails, path);
+  let operationOutput = operation(transactionDetails, path);
+  return messageFormatter[option](operationOutput);
 };
 
 exports.getObjectFromArray = getObjectFromArray;
