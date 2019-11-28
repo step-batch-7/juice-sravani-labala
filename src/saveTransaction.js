@@ -1,5 +1,5 @@
 const utilities = require("./utilities");
-let { addNewTransaction, createTransactionDetails } = utilities;
+let { addNewTransaction } = utilities;
 
 const jsonUtilities = require("./jsonUtiities");
 let { objectToString, stringToObject } = jsonUtilities;
@@ -24,11 +24,14 @@ const saveTransaction = function(
   const employeeId = userInputs[indexOfEmpId + 1];
   const beverage = userInputs[indexOfBeverage + 1];
   const quantity = userInputs[indexOfQuantity + 1];
+
   let transactionDatabase = [];
+
   if (isFileExist(path)) {
     const transactionFile = readFile(path);
     transactionDatabase = stringToObject(transactionFile);
   }
+
   addNewTransaction(employeeId, beverage, quantity, date, transactionDatabase);
   transactionDatabase = objectToString(transactionDatabase);
   writeFile(path, transactionDatabase);
@@ -38,6 +41,7 @@ const saveTransaction = function(
     qty: quantity,
     date: date
   };
+
   return transactionRecorded;
 };
 

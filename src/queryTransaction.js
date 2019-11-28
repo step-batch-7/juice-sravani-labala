@@ -28,7 +28,6 @@ const queryMessageFormatter = function(transactionDatabase) {
   if (!transactionDatabase) {
     return `records not found`;
   }
-  console.log(transactionDatabase);
   const totalJuice = transactionDatabase.totalJuice;
   const values = transactionDatabase.transactionDetails;
   const strigifiedData = `Employee ID, Beverage, Quantity, Date, Time\n${values.join(
@@ -73,6 +72,7 @@ const queryTransaction = function(userInput, path, isFileExist, readFile) {
   const employeeId = userInput[indexOfEmpId + 1];
   const beverage = userInput[indexOfBeverage + 1];
   const date = userInput[indexOfDate + 1];
+
   if (userInput.includes("--empId")) {
     transactionDatabase = transactionDatabase.filter(
       isGivenEmployee(employeeId)

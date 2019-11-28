@@ -5,8 +5,7 @@ const isInputsValid = function(userInputs) {
   const operation = userInputs[0];
   const length = userInputs.length;
   const expectedLengthForSave = 7;
-  //const expectedLengthForQuery = 3;
-  const expectedLengthForQuery = [3, 5];
+  const expectedLengthForQuery = [3, 5, 7];
 
   const inputOptions = [userInputs[1], userInputs[3], userInputs[5]];
 
@@ -19,7 +18,6 @@ const isInputsValid = function(userInputs) {
   const isOperationSave = isEqual("--save", operation);
   const isOpertionQuery = isEqual("--query", operation);
   const isLengthMatchesSave = isEqual(expectedLengthForSave, length);
-  //const isLengthMatchesQuery = isEqual(expectedLengthForQuery, length);
   const isLengthMatchesQuery = isInclude(expectedLengthForQuery, length);
 
   const isEmpIdExists = isInclude(inputOptions, "--empId");

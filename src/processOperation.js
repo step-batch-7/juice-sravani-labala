@@ -21,12 +21,12 @@ const getNumeric = function(string) {
 };
 
 const getConvertedInput = function(userArgs, date) {
-  const avilableOperations = {
+  const availableOperations = {
     "--save": saveTransaction,
     "--query": queryTransaction
   };
   let convertedInputs = [];
-  convertedInputs[0] = avilableOperations[userArgs[0]];
+  convertedInputs[0] = availableOperations[userArgs[0]];
   convertedInputs[1] = getObjectFromArray(userArgs.slice(1));
   convertedInputs[1]["--qty"] = getNumeric(convertedInputs[1]["--qty"]);
   convertedInputs[1]["--date"] = date;
