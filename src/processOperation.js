@@ -16,7 +16,7 @@ const getObjectFromArray = function(array) {
 };
 
 const getNumeric = function(string) {
-  let numeric = Number(string);
+  const numeric = Number(string);
   return numeric;
 };
 
@@ -29,35 +29,43 @@ const getConvertedInput = function(userArgs, date) {
   convertedInputs[0] = avilableOperations[userArgs[0]];
   convertedInputs[1] = getObjectFromArray(userArgs.slice(1));
   convertedInputs[1]["--qty"] = getNumeric(convertedInputs[1]["--qty"]);
-  convertedInputs[1]["--date"] = date.toJSON();
+  convertedInputs[1]["--date"] = date;
   return convertedInputs;
 };
 
 const inputValidation = function(
   userInputs,
+  date,
   path,
   validityFlag,
   isFileExist,
   readFile,
   writeFile
 ) {
-  let messageFormatter = {
+  const messageFormatter = {
     "--save": saveMessageFormatter,
     "--query": queryMessageFormatter
   };
   if (!validityFlag) {
-    return "request failed";
+    return `request failed`;
   }
-  let option = userInputs[0];
-  let parsedInputs = getConvertedInput(userInputs, new Date());
-  let operation = parsedInputs[0];
-  let transactionDetails = parsedInputs[1];
-  let operationOutput = operation(
+  const option = userInputs[0];
+
+  const availableOperations = {
+    "--save": saveTransaction,
+    "--query": queryTransaction
+  };
+
+  const operation = availableOperations[option];
+  userInputs.shift();
+  const transactionDetails = userInputs;
+  const operationOutput = operation(
     transactionDetails,
     path,
     isFileExist,
     readFile,
-    writeFile
+    writeFile,
+    date
   );
   return messageFormatter[option](operationOutput);
 };

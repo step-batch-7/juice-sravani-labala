@@ -3,8 +3,6 @@ let {
   createTransactionDetails,
   sum,
   addNewTransaction,
-  getEmployeeTransaction,
-  isEmployeeIdPresent,
   stringToNumber,
   isOdd,
   splitByTab,
@@ -14,78 +12,58 @@ let {
   getNumeric,
   isPositiveNumeric
 } = utilities;
-
-const assert = require("assert");
+const chai = require("chai");
+const assert = chai.assert;
+//const assert = require("assert");
 
 describe("getNumeric", function() {
   it("should return the corresponding number if it is numeric", function() {
     assert.strictEqual(getNumeric("2"), 2);
   });
   it("should return 'not a number' if it is not a numeric", function() {
-    assert.strictEqual(getNumeric("a"), NaN);
+    assert.isNaN(getNumeric("a"), NaN);
   });
 });
 
 describe("isPositiveNumeric", function() {
   it("should return true if it a positve numeric number", function() {
-    assert.strictEqual(isPositiveNumeric(2), true);
+    assert.ok(isPositiveNumeric(2));
   });
   it("should return false if the value is less than zero", function() {
-    assert.strictEqual(isPositiveNumeric(-2), false);
+    assert.notOk(isPositiveNumeric(-2));
   });
 });
 
 describe("isInclude", function() {
   it("should return true if the value is present in the array", function() {
-    assert.strictEqual(isInclude([1, 2], 2), true);
+    assert.ok(isInclude([1, 2], 2));
   });
   it("should return false if the value is not included in the array", function() {
-    assert.strictEqual(isInclude([1, 2], 3), false);
+    assert.notOk(isInclude([1, 2], 3));
   });
 });
 
 describe("isEqual", function() {
   it("should return true if both the values are equal", function() {
-    assert.strictEqual(isEqual("1", "1"), true);
+    assert.ok(isEqual("1", "1"));
   });
   it("should return false if both values are not equal", function() {
-    assert.strictEqual(isEqual("1", 1), false);
+    assert.notOk(isEqual("1", 1));
   });
 });
 
 describe("isNumeric", function() {
   it("should return true if the value is string of numeric", function() {
-    assert.strictEqual(isNumeric(2), true);
+    assert.ok(isNumeric(2));
   });
   it("should return false if the value is not numeric in the form of string", function() {
-    assert.strictEqual(isNumeric("2w"), false);
-  });
-});
-
-describe("isEmployeeIdPresent", function() {
-  it("should return true if the employee is present in the list", function() {
-    assert.strictEqual(isEmployeeIdPresent({ 1: "present" }, "1"), true);
-  });
-  it("should return false if the employee is not present in the list", function() {
-    assert.strictEqual(isEmployeeIdPresent({}, "1"), false);
+    assert.notOk(isNumeric("2w"));
   });
 });
 
 describe("sum", function() {
   it("should return the sum of two values", function() {
-    assert.deepStrictEqual(sum(2, 3), 5);
-  });
-});
-
-describe("getEmployeeTransactions", function() {
-  it("should return a strigified Details value of given key", function() {
-    assert.deepStrictEqual(
-      getEmployeeTransaction("1", { 1: [{ beverage: "apple", quantity: 2 }] }),
-      [{ beverage: "apple", quantity: 2 }]
-    );
-  });
-  it("should return an empty array if the employee id is not there", function() {
-    assert.deepStrictEqual(getEmployeeTransaction("1", {}), []);
+    assert.strictEqual(sum(2, 3), 5);
   });
 });
 
@@ -117,7 +95,8 @@ describe("splitByTab", function() {
 describe("createTransactionDetails", function() {
   it("should format the given Details to object", function() {
     let date = "123";
-    assert.deepStrictEqual(createTransactionDetails("orange", 2, date), {
+    assert.deepStrictEqual(createTransactionDetails(1, "orange", 2, date), {
+      empId: 1,
       beverage: "orange",
       quantity: 2,
       date: date
@@ -125,6 +104,7 @@ describe("createTransactionDetails", function() {
   });
   it("should return an empty valued object if the Details is not given", function() {
     assert.deepStrictEqual(createTransactionDetails(), {
+      empId: undefined,
       beverage: undefined,
       quantity: undefined,
       date: undefined
@@ -134,19 +114,19 @@ describe("createTransactionDetails", function() {
 
 describe("addNewTransaction", function() {
   it("should add a new employ id to transaction data", function() {
-    let date = new Date();
-    assert.deepStrictEqual(addNewTransaction(1, "orange", 1, date, {}), {
-      1: [{ beverage: "orange", quantity: 1, date: date }]
-    });
+    //let date = new Date();
+    let date = "1-2-3";
+    assert.deepStrictEqual(addNewTransaction(1, "orange", 1, date, []), [
+      { empId: 1, beverage: "orange", quantity: 1, date: date }
+    ]);
   });
   it("should update an existing employ id with given transactions", function() {
-    let data = { 1: [{ beverage: "orange", quantity: 1, date: "123" }] };
-    let date = new Date();
-    assert.deepStrictEqual(addNewTransaction("1", "apple", 2, date, data), {
-      1: [
-        { beverage: "orange", quantity: 1, date: "123" },
-        { beverage: "apple", quantity: 2, date: date }
-      ]
-    });
+    let data = [{ empId: 1, beverage: "orange", quantity: 1, date: "123" }];
+    //let date = new Date();
+    let date = "1-2-3";
+    assert.deepStrictEqual(addNewTransaction(1, "apple", 2, date, data), [
+      { empId: 1, beverage: "orange", quantity: 1, date: "123" },
+      { empId: 1, beverage: "apple", quantity: 2, date: date }
+    ]);
   });
 });

@@ -1,9 +1,15 @@
-const isEmployeeIdPresent = function(transactionDatabase, employeeId) {
-  return Object.keys(transactionDatabase).includes(employeeId);
-};
-
-const createTransactionDetails = function(beverage, quantity, date) {
-  return { beverage: beverage, quantity: quantity, date: date };
+const createTransactionDetails = function(
+  employeeId,
+  beverage,
+  quantity,
+  date
+) {
+  return {
+    empId: employeeId,
+    beverage: beverage,
+    quantity: quantity,
+    date: date
+  };
 };
 
 const addNewTransaction = function(
@@ -13,24 +19,14 @@ const addNewTransaction = function(
   date,
   transactionDatabase
 ) {
-  if (!isEmployeeIdPresent(transactionDatabase, employeeId)) {
-    transactionDatabase[employeeId] = [];
-  }
-  transactionDatabase[employeeId].push(
-    createTransactionDetails(beverage, quantity, date)
+  transactionDatabase.push(
+    createTransactionDetails(employeeId, beverage, quantity, date)
   );
   return transactionDatabase;
 };
 
 const sum = function(firstValue, secondValue) {
   return firstValue + secondValue;
-};
-
-const getEmployeeTransaction = function(employeeId, transactionDetails) {
-  if (!isEmployeeIdPresent(transactionDetails, employeeId)) {
-    return [];
-  }
-  return transactionDetails[employeeId];
 };
 
 const stringToNumber = function(stringifiedData) {
@@ -71,10 +67,8 @@ exports.isNumeric = isNumeric;
 exports.isEqual = isEqual;
 exports.isInclude = isInclude;
 exports.isOdd = isOdd;
-exports.isEmployeeIdPresent = isEmployeeIdPresent;
 exports.createTransactionDetails = createTransactionDetails;
 exports.addNewTransaction = addNewTransaction;
 exports.sum = sum;
-exports.getEmployeeTransaction = getEmployeeTransaction;
 exports.stringToNumber = stringToNumber;
 exports.splitByTab = splitByTab;

@@ -1,1 +1,74 @@
-{"1":[{"beverage":"watermelon","quantity":3,"date":"2019-11-27T08:54:51.116Z"},{"beverage":"watermelon","quantity":3,"date":"2019-11-27T09:32:02.854Z"}]}
+[
+  {
+    "empId": "1",
+    "beverage": "orange",
+    "quantity": "3",
+    "date": "2019-11-28T12:20:16.242Z"
+  },
+  {
+    "empId": "1",
+    "beverage": "watermelon",
+    "quantity": "3",
+    "date": "2019-11-28T12:20:27.867Z"
+  },
+  {
+    "empId": "1",
+    "beverage": "watermelon",
+    "quantity": "3",
+    "date": "2019-11-28T12:25:24.439Z"
+  },
+  {
+    "empId": "1",
+    "beverage": "watermelon",
+    "quantity": "3",
+    "date": "2019-11-28T12:33:42.014Z"
+  },
+  {
+    "empId": "1",
+    "beverage": "watermelon",
+    "quantity": "3",
+    "date": "2019-11-28T12:37:32.802Z"
+  },
+  {
+    "empId": "1",
+    "beverage": "watermelon",
+    "quantity": "3",
+    "date": "2019-11-28T12:40:54.592Z"
+  },
+  {
+    "empId": "1",
+    "beverage": "watermelon",
+    "quantity": "3",
+    "date": "2019-11-28T12:42:33.513Z"
+  },
+  {
+    "empId": "1",
+    "beverage": "watermelon",
+    "quantity": "3",
+    "date": "2019-11-28T12:43:41.757Z"
+  },
+  {
+    "empId": "1",
+    "beverage": "watermelon",
+    "quantity": "3",
+    "date": "2019-11-28T16:45:14.443Z"
+  },
+  {
+    "empId": "1",
+    "beverage": "watermelon",
+    "quantity": "3",
+    "date": "2019-11-28T17:11:15.778Z"
+  },
+  {
+    "empId": "1",
+    "beverage": "watermelon",
+    "quantity": "3",
+    "date": "2019-11-28T17:13:30.317Z"
+  },
+  {
+    "empId": "1",
+    "beverage": "watermelon",
+    "quantity": "3",
+    "date": "2019-11-28T17:30:43.798Z"
+  }
+]

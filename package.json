@@ -14,7 +14,9 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "chai": "^4.2.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/step-batch-7/juice-sravani-labala.git"

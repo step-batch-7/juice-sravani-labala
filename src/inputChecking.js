@@ -2,35 +2,41 @@ const utilities = require("./utilities");
 const { isEqual, isInclude, isNumeric, isPositiveNumeric } = utilities;
 
 const isInputsValid = function(userInputs) {
-  let operation = userInputs[0];
-  let length = userInputs.length;
-  let expectedLengthForSave = 7;
-  let expectedLengthForQuery = 3;
-  let inputOptions = [userInputs[1], userInputs[3], userInputs[5]];
+  const operation = userInputs[0];
+  const length = userInputs.length;
+  const expectedLengthForSave = 7;
+  //const expectedLengthForQuery = 3;
+  const expectedLengthForQuery = [3, 5];
 
-  let validOperation = ["--query", "--save"];
-  let isValidOperation = isInclude(validOperation, operation);
+  const inputOptions = [userInputs[1], userInputs[3], userInputs[5]];
+
+  const validOperation = ["--query", "--save"];
+  const isValidOperation = isInclude(validOperation, operation);
   if (!isValidOperation) {
     return false;
   }
 
-  let isOperationSave = isEqual("--save", operation);
-  let isOpertionQuery = isEqual("--query", operation);
-  let isLengthMatchesSave = isEqual(expectedLengthForSave, length);
-  let isLengthMatchesQuery = isEqual(expectedLengthForQuery, length);
-  let isEmpIdExists = isInclude(inputOptions, "--empId");
-  let isBeverageExists = isInclude(inputOptions, "--beverage");
-  let isQuantityExists = isInclude(inputOptions, "--qty");
+  const isOperationSave = isEqual("--save", operation);
+  const isOpertionQuery = isEqual("--query", operation);
+  const isLengthMatchesSave = isEqual(expectedLengthForSave, length);
+  //const isLengthMatchesQuery = isEqual(expectedLengthForQuery, length);
+  const isLengthMatchesQuery = isInclude(expectedLengthForQuery, length);
 
-  let indexOfEmpId = userInputs.indexOf("--empId");
-  let indexOfBeverage = userInputs.indexOf("--beverage");
-  let indexOfQuantity = userInputs.indexOf("--qty");
+  const isEmpIdExists = isInclude(inputOptions, "--empId");
+  const isBeverageExists = isInclude(inputOptions, "--beverage");
+  const isQuantityExists = isInclude(inputOptions, "--qty");
+  const isDateExists = isInclude(inputOptions, "--date");
 
-  let isEmpIdValid = isPositiveNumeric(userInputs[indexOfEmpId + 1]);
-  let isQuantityValid = isPositiveNumeric(userInputs[indexOfQuantity + 1]);
-  let isBeverageValid = !isNumeric(userInputs[indexOfBeverage + 1]);
+  const indexOfEmpId = userInputs.indexOf("--empId");
+  const indexOfBeverage = userInputs.indexOf("--beverage");
+  const indexOfQuantity = userInputs.indexOf("--qty");
+  const indexOfDate = userInputs.indexOf("--date");
 
-  let saveFlag =
+  const isEmpIdValid = isPositiveNumeric(userInputs[indexOfEmpId + 1]);
+  const isQuantityValid = isPositiveNumeric(userInputs[indexOfQuantity + 1]);
+  const isBeverageValid = !isNumeric(userInputs[indexOfBeverage + 1]);
+
+  const saveFlag =
     isOperationSave &&
     isLengthMatchesSave &&
     isEmpIdExists &&
@@ -40,7 +46,7 @@ const isInputsValid = function(userInputs) {
     isQuantityValid &&
     isBeverageValid;
 
-  let queryFlag =
+  const queryFlag =
     isOpertionQuery && isLengthMatchesQuery && isEmpIdExists && isEmpIdValid;
 
   if (!(saveFlag || queryFlag)) {

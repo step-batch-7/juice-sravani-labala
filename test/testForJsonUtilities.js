@@ -1,7 +1,16 @@
-const assert = require("assert");
-
+//const assert = require("assert");
+const chai = require("chai");
+const assert = chai.assert;
 const jsonUtilities = require("../src/jsonUtiities");
-let { stringToObject, objectToString } = jsonUtilities;
+let { stringToObject, objectToString, dateAndTime } = jsonUtilities;
+
+describe("dateAndTime", function() {
+  it("should return the  date and time", function() {
+    const actual = dateAndTime();
+    const expected = new Date().toJSON();
+    assert.strictEqual(actual, expected);
+  });
+});
 
 describe("stringToObject", function() {
   it("should convert string to object", function() {

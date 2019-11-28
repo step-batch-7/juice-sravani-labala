@@ -1,27 +1,18 @@
 const utilities = require("./utilities");
-let { getEmployeeTransaction, stringToNumber, sum, splitByTab } = utilities;
+let { stringToNumber, sum, splitByTab } = utilities;
 
 const jsonUtilities = require("./jsonUtiities");
 let { stringToObject } = jsonUtilities;
 
-//const fileAccess = require("./fileAccessUtility");
-//let { readFile, isFileExist } = fileAccess;
-
 const getQueryTransactionDetails = function(queryTransactionList, transaction) {
-  queryTransactionList["transactionDetails"] +=
-    transaction["beverage"] +
-    "\t" +
-    transaction["quantity"] +
-    "\t" +
-    transaction["date"] +
-    "\n";
-  queryTransactionList["totalSum"] += transaction["quantity"] + " ";
+  queryTransactionList.transactionDetails += `${transaction.empId}\t${transaction.beverage}\t${transaction.quantity}\t${transaction.date}\n`;
+  queryTransactionList.totalSum += transaction.quantity + " ";
   return queryTransactionList;
 };
 
 const queryTransactionRecords = function(data) {
-  let juiceRecords = data["totalSum"];
-  let transactionDetails = data["transactionDetails"];
+  let juiceRecords = data.totalSum;
+  let transactionDetails = data.transactionDetails;
 
   juiceRecords = juiceRecords.split(" ");
   juiceRecords.pop();
@@ -33,50 +24,79 @@ const queryTransactionRecords = function(data) {
   return { totalJuice: juiceRecords, transactionDetails: transactionDetails };
 };
 
-const queryMessageFormatter = function(transactionDetails) {
-  if (!transactionDetails) {
-    return "records not found";
+const queryMessageFormatter = function(transactionDatabase) {
+  if (!transactionDatabase) {
+    return `records not found`;
   }
-  let employeeId = transactionDetails[0];
-  let data = transactionDetails[1];
-  let detailsOfTransaction = data["transactionDetails"];
-  let strigifiedData = "Employee ID, Beverage, Quantity, Date, Time\n";
-  for (let index = 0; index < detailsOfTransaction.length; index++) {
-    strigifiedData =
-      strigifiedData +
-      employeeId +
-      ", " +
-      detailsOfTransaction[index][0] +
-      ", " +
-      detailsOfTransaction[index][1] +
-      ", " +
-      detailsOfTransaction[index][2] +
-      "\n";
-  }
-  strigifiedData = strigifiedData + "Total: " + data["totalJuice"] + " Juices";
+  console.log(transactionDatabase);
+  const totalJuice = transactionDatabase.totalJuice;
+  const values = transactionDatabase.transactionDetails;
+  const strigifiedData = `Employee ID, Beverage, Quantity, Date, Time\n${values.join(
+    "\n"
+  )}\nTotal:${totalJuice} Juices`;
   return strigifiedData;
 };
 
+const isGivenDate = function(date) {
+  return function(obj) {
+    let length = date.length;
+    const trDate = obj.date.slice(0, length);
+    return date == trDate;
+  };
+};
+
+const isGivenEmployee = function(empId) {
+  return function(obj) {
+    const trEmpId = obj.empId;
+    return empId == trEmpId;
+  };
+};
+
+const isGivenBeverage = function(beverage) {
+  return function(obj) {
+    const trBeverage = obj.beverage;
+    return beverage == trBeverage;
+  };
+};
+
 const queryTransaction = function(userInput, path, isFileExist, readFile) {
-  let employeeId = userInput["--empId"];
   if (!isFileExist(path)) {
     return 0;
   }
-  let transactionFile = readFile(path);
+  const transactionFile = readFile(path);
   let transactionDatabase = stringToObject(transactionFile);
-  let currentEmployeeTransactions = getEmployeeTransaction(
-    employeeId,
-    transactionDatabase
-  );
-  let concattedEmployeeTransactions = currentEmployeeTransactions.reduce(
+
+  const indexOfEmpId = userInput.indexOf("--empId");
+  const indexOfBeverage = userInput.indexOf("--beverage");
+  const indexOfDate = userInput.indexOf("--date");
+
+  const employeeId = userInput[indexOfEmpId + 1];
+  const beverage = userInput[indexOfBeverage + 1];
+  const date = userInput[indexOfDate + 1];
+  if (userInput.includes("--empId")) {
+    transactionDatabase = transactionDatabase.filter(
+      isGivenEmployee(employeeId)
+    );
+  }
+
+  if (userInput.includes("--beverage")) {
+    transactionDatabase = transactionDatabase.filter(isGivenBeverage(beverage));
+  }
+
+  if (userInput.includes("--date")) {
+    transactionDatabase = transactionDatabase.filter(isGivenDate(date));
+  }
+
+  const concattedEmployeeTransactions = transactionDatabase.reduce(
     getQueryTransactionDetails,
     {
       transactionDetails: "",
       totalSum: 0
     }
   );
-  let records = queryTransactionRecords(concattedEmployeeTransactions);
-  return [employeeId, records];
+
+  const records = queryTransactionRecords(concattedEmployeeTransactions);
+  return records;
 };
 
 exports.queryTransaction = queryTransaction;

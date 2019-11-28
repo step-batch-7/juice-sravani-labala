@@ -1,8 +1,10 @@
-const assert = require("assert");
+//const assert = require("assert");
 const save = require("../src/saveTransaction").saveTransaction;
-
+const chai = require("chai");
+const assert = chai.assert;
 const fileAccess = require("./../src/fileAccessUtility");
 let { readFile, writeFile, isFileExist } = fileAccess;
+//const date = require("./testForJsonUtilities").dateAndTime;
 
 const validations = require("../src/processOperation");
 
@@ -16,7 +18,7 @@ const {
 describe("inputValidation", function() {
   it("should return 'request failed' if the inputs are not valid", function() {
     assert.strictEqual(
-      inputValidation([], "", false, isFileExist, readFile, writeFile),
+      inputValidation([], "", "1-2-3", false, isFileExist, readFile, writeFile),
       "request failed"
     );
   });
@@ -24,13 +26,14 @@ describe("inputValidation", function() {
     assert.strictEqual(
       inputValidation(
         ["--query", "--empId", "1"],
+        "123",
         "./test/testingTransactionFileQuery.json",
         true,
         isFileExist,
         readFile,
         writeFile
       ),
-      "Employee ID, Beverage, Quantity, Date, Time\n1, apple, 2, 01-01-2019\nTotal: 2 Juices"
+      "Employee ID, Beverage, Quantity, Date, Time\n1,apple,2,01-01-2019\nTotal:2 Juices"
     );
   });
 });
@@ -57,12 +60,13 @@ describe("getNumeric", function() {
 
 describe("getConvertedInput", function() {
   it("should return an array by converting the operation to corresponding func references and qty to numeric", function() {
-    let date = new Date();
-    let convertedDate = date.toJSON();
+    //let date = new Date();
+    //let convertedDate = date.toJSON();
+    let convertedDate = "123";
     assert.deepStrictEqual(
       getConvertedInput(
         ["--save", "--empId", "1111", "--beverage", "orange", "--qty", "2"],
-        date
+        convertedDate
       ),
       [
         save,

@@ -4,7 +4,7 @@ const isFileExist = function(path) {
 };
 
 const readFile = function(path) {
-  let transactionDatabase = fs.readFileSync(path, "utf8");
+  const transactionDatabase = fs.readFileSync(path, "utf8");
   return transactionDatabase;
 };
 

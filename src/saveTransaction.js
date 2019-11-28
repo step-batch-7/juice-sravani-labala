@@ -4,22 +4,8 @@ let { addNewTransaction, createTransactionDetails } = utilities;
 const jsonUtilities = require("./jsonUtiities");
 let { objectToString, stringToObject } = jsonUtilities;
 
-//const fileAccess = require("./fileAccessUtility");
-//let { readFile, writeFile, isFileExist } = fileAccess;
-
 const saveMessageFormatter = function(data) {
-  let stringifiedData = "Transaction Recorded:\n";
-  stringifiedData =
-    stringifiedData + "Employee ID, Beverage, Quantity, Date, Time\n";
-  stringifiedData =
-    stringifiedData +
-    data["empId"] +
-    ", " +
-    data["beverage"] +
-    ", " +
-    data["qty"] +
-    ", " +
-    data["date"];
+  let stringifiedData = `Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date, Time\n${data.empId}, ${data.beverage}, ${data.qty}, ${data.date}`;
   return stringifiedData;
 };
 
@@ -28,27 +14,30 @@ const saveTransaction = function(
   path,
   isFileExist,
   readFile,
-  writeFile
+  writeFile,
+  date
 ) {
-  let employeeId = userInputs["--empId"];
-  let beverage = userInputs["--beverage"];
-  let quantity = userInputs["--qty"];
-  let date = userInputs["--date"];
-  let transactionDatabase = {};
+  const indexOfEmpId = userInputs.indexOf("--empId");
+  const indexOfBeverage = userInputs.indexOf("--beverage");
+  const indexOfQuantity = userInputs.indexOf("--qty");
+
+  const employeeId = userInputs[indexOfEmpId + 1];
+  const beverage = userInputs[indexOfBeverage + 1];
+  const quantity = userInputs[indexOfQuantity + 1];
+  let transactionDatabase = [];
   if (isFileExist(path)) {
-    let transactionFile = readFile(path);
+    const transactionFile = readFile(path);
     transactionDatabase = stringToObject(transactionFile);
   }
   addNewTransaction(employeeId, beverage, quantity, date, transactionDatabase);
   transactionDatabase = objectToString(transactionDatabase);
   writeFile(path, transactionDatabase);
-  let transactionRecorded = {
+  const transactionRecorded = {
     empId: employeeId,
     beverage: beverage,
     qty: quantity,
     date: date
   };
-
   return transactionRecorded;
 };
 

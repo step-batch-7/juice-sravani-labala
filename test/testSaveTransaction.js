@@ -1,30 +1,70 @@
-const assert = require("assert");
+//const assert = require("assert");
+const chai = require("chai");
+const assert = chai.assert;
 const save = require("./../src/saveTransaction");
 let { saveTransaction, saveMessageFormatter } = save;
 
-const fileAccess = require("./../src/fileAccessUtility");
-let { readFile, writeFile, isFileExist } = fileAccess;
-
 describe("saveTransaction", function() {
-  it("should add the new transaction to the existing transaction", function() {
+  it("should add the new transaction to the existing transaction if file present", function() {
+    const readFile = function(path) {
+      assert.strictEqual("./test/testingTransactionFileForSave.json", path);
+      return "[]";
+    };
+    const isFileExist = function(path) {
+      assert.strictEqual("./test/testingTransactionFileForSave.json", path);
+      return true;
+    };
+    const writeFile = function(path) {
+      assert.strictEqual("./test/testingTransactionFileForSave.json", path);
+      return "";
+    };
+    let date = "123";
     let expected = {
       beverage: "apple",
-      date: new Date().toJSON(),
+      date: "123",
       empId: "1",
       qty: "2"
     };
     assert.deepStrictEqual(
       saveTransaction(
-        {
-          "--empId": "1",
-          "--beverage": "apple",
-          "--qty": "2",
-          "--date": new Date().toJSON()
-        },
+        ["--empId", "1", "--beverage", "apple", "--qty", "2", "--date", "123"],
         "./test/testingTransactionFileForSave.json",
         isFileExist,
         readFile,
-        writeFile
+        writeFile,
+        date
+      ),
+      expected
+    );
+  });
+  it("should add the new transaction to the existing transaction if file not present", function() {
+    const readFile = function(path) {
+      assert.strictEqual("./test/testingTransactionFileForSave.json", path);
+      return "";
+    };
+    const isFileExist = function(path) {
+      assert.strictEqual("./test/testingTransactionFileForSave.json", path);
+      return false;
+    };
+    const writeFile = function(path) {
+      assert.strictEqual("./test/testingTransactionFileForSave.json", path);
+      return "";
+    };
+    let date = "123";
+    let expected = {
+      beverage: "apple",
+      date: "123",
+      empId: "1",
+      qty: "2"
+    };
+    assert.deepStrictEqual(
+      saveTransaction(
+        ["--empId", "1", "--beverage", "apple", "--qty", "2"],
+        "./test/testingTransactionFileForSave.json",
+        isFileExist,
+        readFile,
+        writeFile,
+        date
       ),
       expected
     );
@@ -32,13 +72,13 @@ describe("saveTransaction", function() {
 });
 
 describe("saveMessageFormatter", function() {
-  let date = new Date();
+  let date = "123";
   it("should concatenate all values of keys", function() {
-    let Details = { empId: 1, beverage: "orange", qty: 2, date: date.toJSON() };
-    assert.deepStrictEqual(
+    let Details = { empId: 1, beverage: "orange", qty: 2, date: date };
+    assert.strictEqual(
       saveMessageFormatter(Details),
       "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date, Time\n1, orange, 2, " +
-        date.toJSON()
+        date
     );
   });
 });

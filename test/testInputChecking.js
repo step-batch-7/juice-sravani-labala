@@ -1,16 +1,16 @@
 const isInputsValid = require("./../src/inputChecking").isInputsValid;
-const assert = require("assert");
-
+//const assert = require("assert");
+const chai = require("chai");
+const assert = chai.assert;
 describe("isInputsValid", function() {
   it("should return false if the operation is not valid", function() {
-    assert.strictEqual(
-      isInputsValid(["save", "empId", "1", "beverage", "apple", "qty", "2"]),
-      false
+    assert.notOk(
+      isInputsValid(["save", "empId", "1", "beverage", "apple", "qty", "2"])
     );
   });
 
   it("should return true if the user inputs are valid for save", function() {
-    assert.strictEqual(
+    assert.ok(
       isInputsValid([
         "--save",
         "--empId",
@@ -19,21 +19,20 @@ describe("isInputsValid", function() {
         "apple",
         "--qty",
         "1"
-      ]),
-      true
+      ])
     );
   });
 
   it("should return true if the user inputs are valid for query", function() {
-    assert.strictEqual(isInputsValid(["--query", "--empId", "1"]), true);
+    assert.ok(isInputsValid(["--query", "--empId", "1"]));
   });
 
   it("should return false if query operation inputs are not valid", function() {
-    assert.strictEqual(isInputsValid(["--query", "--empId", "-123"]), false);
+    assert.notOk(isInputsValid(["--query", "--empId", "-123"]));
   });
 
   it("should return false if save operation inputs are not valid", function() {
-    assert.strictEqual(
+    assert.notOk(
       isInputsValid([
         "--save",
         "--qty",
@@ -42,8 +41,7 @@ describe("isInputsValid", function() {
         "2",
         "--beverage",
         "apple"
-      ]),
-      false
+      ])
     );
   });
 });
