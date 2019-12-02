@@ -1,82 +1,112 @@
-//const assert = require("assert");
-const save = require("../src/saveTransaction").saveTransaction;
 const chai = require("chai");
 const assert = chai.assert;
-const fileAccess = require("./../src/fileAccessUtility");
-let { readFile, writeFile, isFileExist } = fileAccess;
-//const date = require("./testForJsonUtilities").dateAndTime;
 
 const validations = require("../src/processOperation");
+const { displayMessage } = validations;
 
-const {
-  getObjectFromArray,
-  getNumeric,
-  getConvertedInput,
-  inputValidation
-} = validations;
-
-describe("inputValidation", function() {
-  it("should return 'request failed' if the inputs are not valid", function() {
+describe("displayMessage", function() {
+  it("should give 'request failed' if the inputs are not valid", function() {
+    const readFile = function(path) {
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileQuery.json",
+        path
+      );
+      return '[{"empId":"1","beverage": "apple", "qty": "2", "date": "01-01-2019" }]';
+    };
+    const writeFile = function(path, data) {
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileQuery.json",
+        path
+      );
+      return "";
+    };
+    const isFileExist = function(path) {
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileQuery.json",
+        path
+      );
+      return false;
+    };
     assert.strictEqual(
-      inputValidation([], "", "1-2-3", false, isFileExist, readFile, writeFile),
+      displayMessage([], "", "1-2-3", false, isFileExist, readFile, writeFile),
       "request failed"
     );
   });
-  it("should return the message formatted for the operation if the inputs are valid", function() {
+
+  it("should give the message formatted for the operation if the inputs are valid", function() {
+    const readFile = function(path) {
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileQuery.json",
+        path
+      );
+      return '[{"empId":"1","beverage": "apple", "qty": "2", "date": "2019-01-01" }]';
+    };
+    const date = function() {
+      return new Date("2019-01-01");
+    };
+    const isFileExist = function(path) {
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileQuery.json",
+        path
+      );
+      return true;
+    };
+    const writeFile = function(path, data) {
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileQuery.json",
+        path
+      );
+      return "";
+    };
     assert.strictEqual(
-      inputValidation(
+      displayMessage(
         ["--query", "--empId", "1"],
-        "123",
-        "./dataFiles/testingTransactionFileQuery.json",
+        date,
+        "./../dataFiles/testingTransactionFileQuery.json",
         true,
         isFileExist,
         readFile,
         writeFile
       ),
-      "Employee ID, Beverage, Quantity, Date, Time\n1,apple,2,01-01-2019\nTotal:2 Juices"
+      "Employee ID, Beverage, Quantity, Date\n1,apple,2,2019-01-01\nTotal: 2 Juices"
     );
   });
-});
-
-describe("getObjectFromArray", function() {
-  it("should give an object by taking alternative elements as keys and value", function() {
-    assert.deepStrictEqual(getObjectFromArray(["a", "A", "b", "B", "c", "C"]), {
-      a: "A",
-      b: "B",
-      c: "C"
-    });
-  });
-
-  it("it should return an empty object if the given array is empty", function() {
-    assert.deepStrictEqual(getObjectFromArray([]), {});
-  });
-});
-
-describe("getNumeric", function() {
-  it("should return the numeric value of the given string", function() {
-    assert.strictEqual(getNumeric("1111"), 1111);
-  });
-});
-
-describe("getConvertedInput", function() {
-  it("should return an array by converting the operation to corresponding func references and qty to numeric", function() {
-    //let date = new Date();
-    //let convertedDate = date.toJSON();
-    let convertedDate = "123";
-    assert.deepStrictEqual(
-      getConvertedInput(
-        ["--save", "--empId", "1111", "--beverage", "orange", "--qty", "2"],
-        convertedDate
+  it("should give the message formatted for the operation if the inputs are valid", function() {
+    const readFile = function(path) {
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileQuery.json",
+        path
+      );
+      return '[{"empId":"1","beverage": "apple", "qty": "1", "date": "2019-01-01" }]';
+    };
+    const date = function() {
+      return new Date("2019-01-01");
+    };
+    const isFileExist = function(path) {
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileQuery.json",
+        path
+      );
+      return true;
+    };
+    const writeFile = function(path, data) {
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileQuery.json",
+        path
+      );
+      return "";
+    };
+    assert.strictEqual(
+      displayMessage(
+        ["--query", "--empId", "1"],
+        date,
+        "./../dataFiles/testingTransactionFileQuery.json",
+        true,
+        isFileExist,
+        readFile,
+        writeFile
       ),
-      [
-        save,
-        {
-          "--empId": "1111",
-          "--beverage": "orange",
-          "--qty": 2,
-          "--date": convertedDate
-        }
-      ]
+      "Employee ID, Beverage, Quantity, Date\n1,apple,1,2019-01-01\nTotal: 1 Juice"
     );
   });
 });

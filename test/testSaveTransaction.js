@@ -1,4 +1,3 @@
-//const assert = require("assert");
 const chai = require("chai");
 const assert = chai.assert;
 const save = require("./../src/saveTransaction");
@@ -27,10 +26,13 @@ describe("saveTransaction", function() {
       );
       return "";
     };
-    let date = "123";
+    let date = function() {
+      return new Date("1234-11-29");
+    };
+
     let expected = {
       beverage: "apple",
-      date: "123",
+      date: new Date("1234-11-29"),
       empId: "1",
       qty: "2"
     };
@@ -61,17 +63,19 @@ describe("saveTransaction", function() {
       );
       return false;
     };
-    const writeFile = function(path) {
+    const writeFile = function(path, data) {
       assert.strictEqual(
         "./../dataFiles/testingTransactionFileForSave.json",
         path
       );
       return "";
     };
-    let date = "123";
+    let date = function() {
+      return new Date("1234-11-29");
+    };
     let expected = {
       beverage: "apple",
-      date: "123",
+      date: new Date("1234-11-29"),
       empId: "1",
       qty: "2"
     };
@@ -90,13 +94,15 @@ describe("saveTransaction", function() {
 });
 
 describe("saveMessageFormatter", function() {
-  let date = "123";
+  let date = function() {
+    return new Date("123");
+  };
   it("should concatenate all values of keys", function() {
-    let Details = { empId: 1, beverage: "orange", qty: 2, date: date };
+    let Details = { empId: 1, beverage: "orange", qty: 2, date: date() };
     assert.strictEqual(
       saveMessageFormatter(Details),
-      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date, Time\n1, orange, 2, " +
-        date
+      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date\n1,orange,2," +
+        date().toJSON()
     );
   });
 });

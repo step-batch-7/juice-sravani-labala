@@ -2,20 +2,19 @@ const isInputsValid = require("./src/inputChecking").isInputsValid;
 
 const fileAccess = require("./src/fileAccessUtility");
 let { readFile, writeFile, isFileExist } = fileAccess;
+const { timeStamp, getDataStorePath } = require("./src/config");
 
-const dateAndTime = require("./src/jsonUtiities").dateAndTime;
-
-const inputValidation = require("./src/processOperation").inputValidation;
+const displayMessage = require("./src/processOperation").displayMessage;
 const main = function() {
-  let date = dateAndTime();
+  const path = getDataStorePath(process.env);
+  const timeStampWithEnv = timeStamp.bind(null, process.env);
   let userInputs = process.argv.slice(2);
-  let path = "./juiceTransactionDetails.json";
   let validatyFlag = isInputsValid(userInputs);
 
   console.log(
-    inputValidation(
+    displayMessage(
       userInputs,
-      date,
+      timeStampWithEnv,
       path,
       validatyFlag,
       isFileExist,

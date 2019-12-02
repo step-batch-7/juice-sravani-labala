@@ -1,6 +1,6 @@
 const utilities = require("./utilities");
 let { splitByTab } = utilities;
-
+const getPreviousTxns = require("./utilities").getPreviousTxns;
 const jsonUtilities = require("./jsonUtiities");
 let { stringToObject } = jsonUtilities;
 
@@ -8,12 +8,11 @@ const getQueryTransactionDetails = function(queryTransactionList, transaction) {
   queryTransactionList.transactionDetails += [
     transaction.empId,
     transaction.beverage,
-    transaction.quantity,
+    transaction.qty,
     transaction.date,
     "\n"
   ];
-
-  queryTransactionList.totalSum += +transaction.quantity;
+  queryTransactionList.totalSum += +transaction.qty;
   return queryTransactionList;
 };
 
@@ -32,73 +31,75 @@ const queryMessageFormatter = function(transactionDatabase) {
   }
   const totalJuice = transactionDatabase.totalJuice;
   const values = transactionDatabase.transactionDetails;
-  const strigifiedData = `Employee ID, Beverage, Quantity, Date, Time\n${values.join(
+  const juiceString = totalJuice == 1 ? "Juice" : "Juices";
+  const strigifiedData = `Employee ID, Beverage, Quantity, Date\n${values.join(
     "\n"
-  )}\nTotal:${totalJuice} Juices`;
+  )}\nTotal: ${totalJuice} ${juiceString}`;
   return strigifiedData;
 };
 
-const isGivenDate = function(date) {
+const isGivenOption = function(searchKey, searchedFor) {
   return function(obj) {
-    let length = date.length;
-    const trDate = obj.date.slice(0, length);
-    return date == trDate;
+    let txnOption = obj[searchKey];
+    if (searchKey == "date") {
+      txnOption = txnOption.slice(0, 10);
+    }
+    return searchedFor == txnOption;
   };
 };
-
-const isGivenEmployee = function(empId) {
-  return function(obj) {
-    const trEmpId = obj.empId;
-    return empId == trEmpId;
-  };
+const getFilteredEmpTxns = function(userInput, transactionDatabase) {
+  const indexOfEmpId = userInput.indexOf("--empId");
+  const employeeId = userInput[indexOfEmpId + 1];
+  let filteredEmpTxns = transactionDatabase;
+  if (userInput.includes("--empId")) {
+    filteredEmpTxns = transactionDatabase.filter(
+      isGivenOption("empId", employeeId)
+    );
+  }
+  return filteredEmpTxns;
 };
 
-const isGivenBeverage = function(beverage) {
-  return function(obj) {
-    const trBeverage = obj.beverage;
-    return beverage == trBeverage;
-  };
+const getFilteredBeverageTxns = function(userInput, filteredEmpTxns) {
+  const indexOfBeverage = userInput.indexOf("--beverage");
+  const beverageName = userInput[indexOfBeverage + 1];
+  let filteredBeverageTxns = filteredEmpTxns;
+  if (userInput.includes("--beverage")) {
+    const beverageFinder = isGivenOption("beverage", beverageName);
+    filteredBeverageTxns = filteredEmpTxns.filter(beverageFinder);
+  }
+  return filteredBeverageTxns;
+};
+
+const getFilteredDateTxns = function(userInput, filteredBeverageTxns) {
+  const indexOfDate = userInput.indexOf("--date");
+  const date = userInput[indexOfDate + 1];
+  let filteredDateTxns = filteredBeverageTxns;
+  if (userInput.includes("--date")) {
+    dateFinder = isGivenOption("date", date);
+    filteredDateTxns = filteredBeverageTxns.filter(dateFinder);
+  }
+  return filteredDateTxns;
 };
 
 const queryTransaction = function(userInput, path, isFileExist, readFile) {
-  if (!isFileExist(path)) {
-    return 0;
-  }
-  let transactionFile = readFile(path);
-  transactionFile = transactionFile || "[]";
-  let transactionDatabase = stringToObject(transactionFile);
+  let transactionDatabase = getPreviousTxns(isFileExist, readFile, path);
 
-  const indexOfEmpId = userInput.indexOf("--empId");
-  const indexOfBeverage = userInput.indexOf("--beverage");
-  const indexOfDate = userInput.indexOf("--date");
+  const filteredEmpTxns = getFilteredEmpTxns(userInput, transactionDatabase);
+  const filteredBeverageTxns = getFilteredBeverageTxns(
+    userInput,
+    filteredEmpTxns
+  );
+  const filteredDateTxns = getFilteredDateTxns(userInput, filteredBeverageTxns);
 
-  const employeeId = userInput[indexOfEmpId + 1];
-  const beverage = userInput[indexOfBeverage + 1];
-  const date = userInput[indexOfDate + 1];
-
-  if (userInput.includes("--empId")) {
-    transactionDatabase = transactionDatabase.filter(
-      isGivenEmployee(employeeId)
-    );
-  }
-
-  if (userInput.includes("--beverage")) {
-    transactionDatabase = transactionDatabase.filter(isGivenBeverage(beverage));
-  }
-
-  if (userInput.includes("--date")) {
-    transactionDatabase = transactionDatabase.filter(isGivenDate(date));
-  }
-
-  const concattedEmployeeTransactions = transactionDatabase.reduce(
+  const concattedEmployeeTransactions = filteredDateTxns.reduce(
     getQueryTransactionDetails,
     {
       transactionDetails: "",
       totalSum: 0
     }
   );
-  const records = queryTransactionRecords(concattedEmployeeTransactions);
 
+  const records = queryTransactionRecords(concattedEmployeeTransactions);
   return records;
 };
 

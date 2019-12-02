@@ -45,7 +45,11 @@ const isInputsValid = function(userInputs) {
     isBeverageValid;
 
   const queryFlag =
-    isOpertionQuery && isLengthMatchesQuery && isEmpIdExists && isEmpIdValid;
+    isOpertionQuery &&
+    isLengthMatchesQuery &&
+    ((isEmpIdExists && isEmpIdValid) ||
+      (isBeverageExists && isBeverageValid) ||
+      isDateExists);
 
   if (!(saveFlag || queryFlag)) {
     return false;
