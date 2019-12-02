@@ -27,7 +27,7 @@ describe("inputValidation", function() {
       inputValidation(
         ["--query", "--empId", "1"],
         "123",
-        "./test/testingTransactionFileQuery.json",
+        "./dataFiles/testingTransactionFileQuery.json",
         true,
         isFileExist,
         readFile,

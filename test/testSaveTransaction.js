@@ -7,15 +7,24 @@ let { saveTransaction, saveMessageFormatter } = save;
 describe("saveTransaction", function() {
   it("should add the new transaction to the existing transaction if file present", function() {
     const readFile = function(path) {
-      assert.strictEqual("./test/testingTransactionFileForSave.json", path);
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileForSave.json",
+        path
+      );
       return "[]";
     };
     const isFileExist = function(path) {
-      assert.strictEqual("./test/testingTransactionFileForSave.json", path);
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileForSave.json",
+        path
+      );
       return true;
     };
     const writeFile = function(path) {
-      assert.strictEqual("./test/testingTransactionFileForSave.json", path);
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileForSave.json",
+        path
+      );
       return "";
     };
     let date = "123";
@@ -28,7 +37,7 @@ describe("saveTransaction", function() {
     assert.deepStrictEqual(
       saveTransaction(
         ["--empId", "1", "--beverage", "apple", "--qty", "2", "--date", "123"],
-        "./test/testingTransactionFileForSave.json",
+        "./../dataFiles/testingTransactionFileForSave.json",
         isFileExist,
         readFile,
         writeFile,
@@ -39,15 +48,24 @@ describe("saveTransaction", function() {
   });
   it("should add the new transaction to the existing transaction if file not present", function() {
     const readFile = function(path) {
-      assert.strictEqual("./test/testingTransactionFileForSave.json", path);
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileForSave.json",
+        path
+      );
       return "";
     };
     const isFileExist = function(path) {
-      assert.strictEqual("./test/testingTransactionFileForSave.json", path);
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileForSave.json",
+        path
+      );
       return false;
     };
     const writeFile = function(path) {
-      assert.strictEqual("./test/testingTransactionFileForSave.json", path);
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileForSave.json",
+        path
+      );
       return "";
     };
     let date = "123";
@@ -60,7 +78,7 @@ describe("saveTransaction", function() {
     assert.deepStrictEqual(
       saveTransaction(
         ["--empId", "1", "--beverage", "apple", "--qty", "2"],
-        "./test/testingTransactionFileForSave.json",
+        "./../dataFiles/testingTransactionFileForSave.json",
         isFileExist,
         readFile,
         writeFile,

@@ -1,5 +1,5 @@
 const utilities = require("./utilities");
-let { stringToNumber, sum, splitByTab } = utilities;
+let { splitByTab } = utilities;
 
 const jsonUtilities = require("./jsonUtiities");
 let { stringToObject } = jsonUtilities;
@@ -59,8 +59,6 @@ const isGivenBeverage = function(beverage) {
     return beverage == trBeverage;
   };
 };
-
-const givenQueryOption = function(queryOption) {};
 
 const queryTransaction = function(userInput, path, isFileExist, readFile) {
   if (!isFileExist(path)) {

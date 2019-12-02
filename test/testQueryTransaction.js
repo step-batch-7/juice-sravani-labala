@@ -12,11 +12,17 @@ let {
 describe("queryTransaction", function() {
   it("should give the empid transaction details if it is present", function() {
     const isFileExist = function(path) {
-      assert.strictEqual("./test/testingTransactionFileQuery.json", path);
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileQuery.json",
+        path
+      );
       return true;
     };
     const readFile = function(path) {
-      assert.strictEqual("./test/testingTransactionFileQuery.json", path);
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileQuery.json",
+        path
+      );
       return '[{"empId":"1","beverage": "apple", "quantity": "2", "date": "01-01-2019" }]';
     };
     let expected = {
@@ -26,7 +32,7 @@ describe("queryTransaction", function() {
     assert.deepStrictEqual(
       queryTransaction(
         ["--empId", "1"],
-        "./test/testingTransactionFileQuery.json",
+        "./../dataFiles/testingTransactionFileQuery.json",
         isFileExist,
         readFile
       ),
@@ -35,18 +41,24 @@ describe("queryTransaction", function() {
   });
   it("should validate if the file is not present", function() {
     const isFileExist = function(path) {
-      assert.strictEqual("./test/testingTransactionFileQuery.json", path);
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileQuery.json",
+        path
+      );
       return false;
     };
     const readFile = function(path) {
-      assert.strictEqual("./test/testingTransactionFileQuery.json", path);
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileQuery.json",
+        path
+      );
       return "";
     };
 
     assert.strictEqual(
       queryTransaction(
         { "--empId": "1" },
-        "./test/testingTransactionFileQuery.json",
+        "./../dataFiles/testingTransactionFileQuery.json",
         isFileExist,
         readFile
       ),
