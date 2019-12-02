@@ -5,20 +5,22 @@ const jsonUtilities = require("./jsonUtiities");
 let { stringToObject } = jsonUtilities;
 
 const getQueryTransactionDetails = function(queryTransactionList, transaction) {
-  queryTransactionList.transactionDetails += `${transaction.empId}\t${transaction.beverage}\t${transaction.quantity}\t${transaction.date}\n`;
-  queryTransactionList.totalSum += transaction.quantity + " ";
+  queryTransactionList.transactionDetails += [
+    transaction.empId,
+    transaction.beverage,
+    transaction.quantity,
+    transaction.date,
+    "\n"
+  ];
+
+  queryTransactionList.totalSum += +transaction.quantity;
   return queryTransactionList;
 };
 
 const queryTransactionRecords = function(data) {
   let juiceRecords = data.totalSum;
   let transactionDetails = data.transactionDetails;
-
-  juiceRecords = juiceRecords.split(" ");
-  juiceRecords.pop();
-  juiceRecords = juiceRecords.map(stringToNumber);
-  juiceRecords = juiceRecords.reduce(sum, 0);
-  transactionDetails = transactionDetails.split("\n");
+  transactionDetails = transactionDetails.split(",\n");
   transactionDetails = transactionDetails.map(splitByTab);
   transactionDetails.pop();
   return { totalJuice: juiceRecords, transactionDetails: transactionDetails };
@@ -58,11 +60,14 @@ const isGivenBeverage = function(beverage) {
   };
 };
 
+const givenQueryOption = function(queryOption) {};
+
 const queryTransaction = function(userInput, path, isFileExist, readFile) {
   if (!isFileExist(path)) {
     return 0;
   }
-  const transactionFile = readFile(path);
+  let transactionFile = readFile(path);
+  transactionFile = transactionFile || "[]";
   let transactionDatabase = stringToObject(transactionFile);
 
   const indexOfEmpId = userInput.indexOf("--empId");
@@ -94,8 +99,8 @@ const queryTransaction = function(userInput, path, isFileExist, readFile) {
       totalSum: 0
     }
   );
-
   const records = queryTransactionRecords(concattedEmployeeTransactions);
+
   return records;
 };
 

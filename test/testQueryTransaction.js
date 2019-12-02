@@ -21,7 +21,7 @@ describe("queryTransaction", function() {
     };
     let expected = {
       totalJuice: 2,
-      transactionDetails: [["1", "apple", "2", "01-01-2019"]]
+      transactionDetails: [["1,apple,2,01-01-2019"]]
     };
     assert.deepStrictEqual(
       queryTransaction(
@@ -63,20 +63,20 @@ describe("getQueryTransactionDetails", function() {
         transactionDetails: "",
         totalSum: 0
       }),
-      { transactionDetails: "1\tapple\t2\t123\n", totalSum: "02 " }
+      { transactionDetails: "1,apple,2,123,\n", totalSum: 2 }
     );
   });
 });
 
 describe("queryTransactionRecords", function() {
   let details = {
-    transactionDetails: "apple\t2\t123\n",
-    totalSum: "02 3 4 5 "
+    transactionDetails: "1,apple,2,123,\n",
+    totalSum: 14
   };
   it("should return the total number of juices they have taken and transaction in formatted way", function() {
     assert.deepStrictEqual(queryTransactionRecords(details), {
       totalJuice: 14,
-      transactionDetails: [["apple", "2", "123"]]
+      transactionDetails: [["1,apple,2,123"]]
     });
   });
 });

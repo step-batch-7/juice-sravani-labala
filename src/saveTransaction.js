@@ -28,7 +28,8 @@ const saveTransaction = function(
   let transactionDatabase = [];
 
   if (isFileExist(path)) {
-    const transactionFile = readFile(path);
+    let transactionFile = readFile(path);
+    transactionFile = transactionFile || "[]";
     transactionDatabase = stringToObject(transactionFile);
   }
 
