@@ -2,7 +2,7 @@ const utilities = require("./utilities");
 let { addNewTransaction, getPreviousTxns } = utilities;
 
 const jsonUtilities = require("./jsonUtiities");
-let { objectToString, stringToObject } = jsonUtilities;
+let { objectToString } = jsonUtilities;
 
 const saveMessageFormatter = function(data) {
   let stringifiedData = `Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date\n${
@@ -18,14 +18,12 @@ const getNewTxnRecord = function(userInputs, date) {
   const employeeId = userInputs[indexOfEmpId + 1];
   const beverage = userInputs[indexOfBeverage + 1];
   const quantity = userInputs[indexOfQuantity + 1];
-
   const transactionRecorded = {
     empId: employeeId,
     beverage: beverage,
     qty: quantity,
     date: date()
   };
-
   return transactionRecorded;
 };
 
@@ -46,10 +44,10 @@ const saveTransaction = function(
   let newRecord = getNewTxnRecord(userInputs, date);
   addNewTransaction(newRecord, transactionDatabase);
   updateTxnRecords(path, writeFile, transactionDatabase);
-
   return newRecord;
 };
 
 exports.saveTransaction = saveTransaction;
 exports.saveMessageFormatter = saveMessageFormatter;
-exports.getPreviousTxns = getPreviousTxns;
+exports.getNewTxnRecord = getNewTxnRecord;
+exports.updateTxnRecords = updateTxnRecords;

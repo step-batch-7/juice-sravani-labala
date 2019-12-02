@@ -1,18 +1,67 @@
 const utilities = require("../src/utilities");
 let {
-  sum,
   addNewTransaction,
-  stringToNumber,
-  isOdd,
   splitByTab,
   isEqual,
   isInclude,
   isNumeric,
   getNumeric,
-  isPositiveNumeric
+  isPositiveNumeric,
+  getPreviousTxns
 } = utilities;
 const chai = require("chai");
 const assert = chai.assert;
+
+describe("getPreviousTxns", function() {
+  it("should give previous txns database if it exists", function() {
+    const readFile = function(path) {
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileForSave.json",
+        path
+      );
+      return "[123]";
+    };
+    const isFileExist = function(path) {
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileForSave.json",
+        path
+      );
+      return true;
+    };
+    assert.deepStrictEqual(
+      getPreviousTxns(
+        isFileExist,
+        readFile,
+        "./../dataFiles/testingTransactionFileForSave.json"
+      ),
+      [123]
+    );
+  });
+  it("should give empty array if previous txns database doesn't exists", function() {
+    const readFile = function(path) {
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileForSave.json",
+        path
+      );
+      return "";
+    };
+    const isFileExist = function(path) {
+      assert.strictEqual(
+        "./../dataFiles/testingTransactionFileForSave.json",
+        path
+      );
+      return false;
+    };
+    assert.deepStrictEqual(
+      getPreviousTxns(
+        isFileExist,
+        readFile,
+        "./../dataFiles/testingTransactionFileForSave.json"
+      ),
+      []
+    );
+  });
+});
 
 describe("getNumeric", function() {
   it("should give the corresponding number if it is numeric", function() {
@@ -56,27 +105,6 @@ describe("isNumeric", function() {
   });
   it("should give false if the value is not numeric in the form of string", function() {
     assert.notOk(isNumeric("2w"));
-  });
-});
-
-describe("sum", function() {
-  it("should give the sum of two values", function() {
-    assert.strictEqual(sum(2, 3), 5);
-  });
-});
-
-describe("stringToNumber", function() {
-  it("should convert the strigified number to number", function() {
-    assert.strictEqual(stringToNumber("5"), 5);
-  });
-});
-
-describe("isOdd", function() {
-  it("should give true if the number is true", function() {
-    assert.strictEqual(isOdd(3), 1);
-  });
-  it("should give false if the number is even", function() {
-    assert.strictEqual(isOdd(4), 0);
   });
 });
 

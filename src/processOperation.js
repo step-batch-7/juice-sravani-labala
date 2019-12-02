@@ -45,3 +45,4 @@ const generateMsg = function(option, operationOutput) {
 };
 
 exports.displayMessage = displayMessage;
+exports.generateMsg = generateMsg;

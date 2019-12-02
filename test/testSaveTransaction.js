@@ -1,7 +1,12 @@
 const chai = require("chai");
 const assert = chai.assert;
 const save = require("./../src/saveTransaction");
-let { saveTransaction, saveMessageFormatter } = save;
+let {
+  saveTransaction,
+  saveMessageFormatter,
+  getNewTxnRecord,
+  updateTxnRecords
+} = save;
 
 describe("saveTransaction", function() {
   it("should add the new transaction to the existing transaction if file present", function() {
@@ -104,5 +109,21 @@ describe("saveMessageFormatter", function() {
       "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date\n1,orange,2," +
         date().toJSON()
     );
+  });
+});
+
+describe("getNewTxnRecord", function() {
+  it("should give the new transaction details in the form of object", function() {
+    let date = function() {
+      return new Date("123");
+    };
+    let newTransaction = ["--empId", "2", "--qty", "3", "--beverage", "apple"];
+    let expected = {
+      empId: "2",
+      beverage: "apple",
+      qty: "3",
+      date: date()
+    };
+    assert.deepStrictEqual(getNewTxnRecord(newTransaction, date), expected);
   });
 });

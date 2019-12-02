@@ -2,7 +2,7 @@ const chai = require("chai");
 const assert = chai.assert;
 
 const validations = require("../src/processOperation");
-const { displayMessage } = validations;
+const { displayMessage, generateMsg } = validations;
 
 describe("displayMessage", function() {
   it("should give 'request failed' if the inputs are not valid", function() {
@@ -33,7 +33,7 @@ describe("displayMessage", function() {
     );
   });
 
-  it("should give the message formatted for the operation if the inputs are valid", function() {
+  it("should give the formatted message for the query operation if the total juices are more than one", function() {
     const readFile = function(path) {
       assert.strictEqual(
         "./../dataFiles/testingTransactionFileQuery.json",
@@ -71,7 +71,7 @@ describe("displayMessage", function() {
       "Employee ID, Beverage, Quantity, Date\n1,apple,2,2019-01-01\nTotal: 2 Juices"
     );
   });
-  it("should give the message formatted for the operation if the inputs are valid", function() {
+  it("should give the formatted message for the query operation if the total juices are one", function() {
     const readFile = function(path) {
       assert.strictEqual(
         "./../dataFiles/testingTransactionFileQuery.json",
@@ -107,6 +107,31 @@ describe("displayMessage", function() {
         writeFile
       ),
       "Employee ID, Beverage, Quantity, Date\n1,apple,1,2019-01-01\nTotal: 1 Juice"
+    );
+  });
+});
+
+describe("generateMsg", function() {
+  it("should generate the message for the query operation", function() {
+    let operationOutput = {
+      totalJuice: 1,
+      transactionDetails: [["1,apple,1,2019-01-01"]]
+    };
+    assert.strictEqual(
+      generateMsg("--query", operationOutput),
+      "Employee ID, Beverage, Quantity, Date\n1,apple,1,2019-01-01\nTotal: 1 Juice"
+    );
+  });
+  it("should generate the message for the save operation", function() {
+    let operationOutput = {
+      beverage: "apple",
+      date: new Date("1234-11-29"),
+      empId: "1",
+      qty: "2"
+    };
+    assert.strictEqual(
+      generateMsg("--save", operationOutput),
+      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date\n1,apple,2,1234-11-29T00:00:00.000Z"
     );
   });
 });

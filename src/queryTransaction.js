@@ -1,8 +1,5 @@
 const utilities = require("./utilities");
-let { splitByTab } = utilities;
-const getPreviousTxns = require("./utilities").getPreviousTxns;
-const jsonUtilities = require("./jsonUtiities");
-let { stringToObject } = jsonUtilities;
+let { splitByTab, getPreviousTxns } = utilities;
 
 const getQueryTransactionDetails = function(queryTransactionList, transaction) {
   queryTransactionList.transactionDetails += [
@@ -47,6 +44,7 @@ const isGivenOption = function(searchKey, searchedFor) {
     return searchedFor == txnOption;
   };
 };
+
 const getFilteredEmpTxns = function(userInput, transactionDatabase) {
   const indexOfEmpId = userInput.indexOf("--empId");
   const employeeId = userInput[indexOfEmpId + 1];
@@ -83,14 +81,12 @@ const getFilteredDateTxns = function(userInput, filteredBeverageTxns) {
 
 const queryTransaction = function(userInput, path, isFileExist, readFile) {
   let transactionDatabase = getPreviousTxns(isFileExist, readFile, path);
-
   const filteredEmpTxns = getFilteredEmpTxns(userInput, transactionDatabase);
   const filteredBeverageTxns = getFilteredBeverageTxns(
     userInput,
     filteredEmpTxns
   );
   const filteredDateTxns = getFilteredDateTxns(userInput, filteredBeverageTxns);
-
   const concattedEmployeeTransactions = filteredDateTxns.reduce(
     getQueryTransactionDetails,
     {
@@ -98,7 +94,6 @@ const queryTransaction = function(userInput, path, isFileExist, readFile) {
       totalSum: 0
     }
   );
-
   const records = queryTransactionRecords(concattedEmployeeTransactions);
   return records;
 };
@@ -107,3 +102,7 @@ exports.queryTransaction = queryTransaction;
 exports.queryMessageFormatter = queryMessageFormatter;
 exports.getQueryTransactionDetails = getQueryTransactionDetails;
 exports.queryTransactionRecords = queryTransactionRecords;
+exports.isGivenOption = isGivenOption;
+exports.getFilteredEmpTxns = getFilteredEmpTxns;
+exports.getFilteredBeverageTxns = getFilteredBeverageTxns;
+exports.getFilteredDateTxns = getFilteredDateTxns;

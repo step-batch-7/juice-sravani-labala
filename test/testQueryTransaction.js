@@ -6,8 +6,18 @@ let {
   queryTransaction,
   queryTransactionRecords,
   getQueryTransactionDetails,
-  queryMessageFormatter
+  queryMessageFormatter,
+  isGivenOption,
+  getFilteredBeverageTxns,
+  getFilteredDateTxns,
+  getFilteredEmpTxns
 } = query;
+
+describe("isGivenOption", function() {
+  it("should give the filtered option transactions", function() {
+    assert.strictEqual(isGivenOption("empId", "1"));
+  });
+});
 
 describe("queryTransaction", function() {
   it("should give the empid transaction details if it is present", function() {

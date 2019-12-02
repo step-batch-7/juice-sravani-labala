@@ -6,20 +6,8 @@ const addNewTransaction = function(newRecord, transactionDatabase) {
   return transactionDatabase;
 };
 
-const sum = function(firstValue, secondValue) {
-  return firstValue + secondValue;
-};
-
-const stringToNumber = function(stringifiedData) {
-  return +Number(stringifiedData);
-};
-
 const splitByTab = function(data) {
   return data.split("\t");
-};
-
-const isOdd = function(number) {
-  return number % 2;
 };
 
 const isEqual = function(value1, value2) {
@@ -57,8 +45,5 @@ exports.isPositiveNumeric = isPositiveNumeric;
 exports.isNumeric = isNumeric;
 exports.isEqual = isEqual;
 exports.isInclude = isInclude;
-exports.isOdd = isOdd;
 exports.addNewTransaction = addNewTransaction;
-exports.sum = sum;
-exports.stringToNumber = stringToNumber;
 exports.splitByTab = splitByTab;
