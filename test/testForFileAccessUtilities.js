@@ -9,15 +9,21 @@ const {
 
 describe("readFile", function() {
   it("Should read given File", function() {
-    writeFile("./dataFiles/testFileForRead.json", "hello");
-    assert.strictEqual(readFile("./dataFiles/testFileForRead.json"), "hello");
+    writeFile("./appTests/dataFiles/testFileForRead.json", "hello");
+    assert.strictEqual(
+      readFile("./appTests/dataFiles/testFileForRead.json"),
+      "hello"
+    );
   });
 });
 
 describe("writeFile", function() {
   it("Should write to the given file", function() {
-    writeFile("./dataFiles/testFileForWrite.json", "hello");
-    assert.strictEqual(readFile("./dataFiles/testFileForWrite.json"), "hello");
+    writeFile("./appTests/dataFiles/testFileForWrite.json", "hello");
+    assert.strictEqual(
+      readFile("./appTests/dataFiles/testFileForWrite.json"),
+      "hello"
+    );
   });
 });
 
