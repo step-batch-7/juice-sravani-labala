@@ -1,6 +1,7 @@
-const isInputsValid = require("./../src/inputChecking").isInputsValid;
 const chai = require("chai");
 const assert = chai.assert;
+
+const isInputsValid = require("./../src/inputChecking").isInputsValid;
 
 describe("isInputsValid", function() {
   it("should give false if the operation is not valid", function() {
@@ -23,11 +24,11 @@ describe("isInputsValid", function() {
     );
   });
 
-  it("should give true if the user inputs are valid for query", function() {
+  it("should give true if the user inputs consisting of empId is valid for query", function() {
     assert.ok(isInputsValid(["--query", "--empId", "1"]));
   });
 
-  it("should give true if the user inputs are valid for query", function() {
+  it("should give true if the user inputs consisting of beverage is valid for query", function() {
     assert.ok(isInputsValid(["--query", "--beverage", "apple"]));
   });
 

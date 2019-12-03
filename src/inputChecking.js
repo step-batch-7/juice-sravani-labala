@@ -1,12 +1,15 @@
-const utilities = require("./utilities");
-const { isEqual, isInclude, isNumeric, isPositiveNumeric } = utilities;
+const {
+  isEqual,
+  isInclude,
+  isNumeric,
+  isPositiveNumeric
+} = require("./utilities");
 
 const isInputsValid = function(userInputs) {
   const operation = userInputs[0];
   const length = userInputs.length;
   const expectedLengthForSave = 7;
   const expectedLengthForQuery = [3, 5, 7];
-
   const inputOptions = [userInputs[1], userInputs[3], userInputs[5]];
 
   const validOperation = ["--query", "--save"];
@@ -28,7 +31,6 @@ const isInputsValid = function(userInputs) {
   const indexOfEmpId = userInputs.indexOf("--empId");
   const indexOfBeverage = userInputs.indexOf("--beverage");
   const indexOfQuantity = userInputs.indexOf("--qty");
-  const indexOfDate = userInputs.indexOf("--date");
 
   const isEmpIdValid = isPositiveNumeric(userInputs[indexOfEmpId + 1]);
   const isQuantityValid = isPositiveNumeric(userInputs[indexOfQuantity + 1]);

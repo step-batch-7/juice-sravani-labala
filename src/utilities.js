@@ -1,13 +1,8 @@
-const jsonUtilities = require("./jsonUtiities");
-let { stringToObject } = jsonUtilities;
+const { stringToObject } = require("./jsonUtiities");
 
 const addNewTransaction = function(newRecord, transactionDatabase) {
   transactionDatabase.push(newRecord);
   return transactionDatabase;
-};
-
-const splitByTab = function(data) {
-  return data.split("\t");
 };
 
 const isEqual = function(value1, value2) {
@@ -39,11 +34,12 @@ const getPreviousTxns = function(isFileExist, readFile, path) {
   return transactionDatabase;
 };
 
-exports.getPreviousTxns = getPreviousTxns;
-exports.getNumeric = getNumeric;
-exports.isPositiveNumeric = isPositiveNumeric;
-exports.isNumeric = isNumeric;
-exports.isEqual = isEqual;
-exports.isInclude = isInclude;
-exports.addNewTransaction = addNewTransaction;
-exports.splitByTab = splitByTab;
+module.exports = {
+  getPreviousTxns,
+  getNumeric,
+  isPositiveNumeric,
+  isNumeric,
+  isEqual,
+  isInclude,
+  addNewTransaction
+};

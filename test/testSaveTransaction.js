@@ -1,12 +1,11 @@
 const chai = require("chai");
 const assert = chai.assert;
-const save = require("./../src/saveTransaction");
-let {
+
+const {
   saveTransaction,
   saveMessageFormatter,
-  getNewTxnRecord,
-  updateTxnRecords
-} = save;
+  getNewTxnRecord
+} = require("./../src/saveTransaction");
 
 describe("saveTransaction", function() {
   it("should add the new transaction to the existing transaction if file present", function() {
@@ -15,7 +14,7 @@ describe("saveTransaction", function() {
         "./../dataFiles/testingTransactionFileForSave.json",
         path
       );
-      return "[]";
+      return `[{"empId":"1","beverage":"orange","qty":"3","date":"2019-01-01"}]`;
     };
     const isFileExist = function(path) {
       assert.strictEqual(
@@ -24,10 +23,16 @@ describe("saveTransaction", function() {
       );
       return true;
     };
-    const writeFile = function(path) {
+    const writeFile = function(path, data) {
       assert.strictEqual(
         "./../dataFiles/testingTransactionFileForSave.json",
         path
+      );
+      assert.strictEqual(
+        data,
+        `[{"empId":"1","beverage":"orange","qty":"3","date":"2019-01-01"},{"empId":"1","beverage":"apple","qty":"2","date":"${new Date(
+          "1234-11-29"
+        ).toJSON()}"}]`
       );
       return "";
     };
@@ -72,6 +77,12 @@ describe("saveTransaction", function() {
       assert.strictEqual(
         "./../dataFiles/testingTransactionFileForSave.json",
         path
+      );
+      assert.strictEqual(
+        data,
+        `[{"empId":"1","beverage":"apple","qty":"2","date":"${new Date(
+          "1234-11-29"
+        ).toJSON()}"}]`
       );
       return "";
     };

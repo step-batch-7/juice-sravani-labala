@@ -1,8 +1,8 @@
-const saveTransaction = require("./saveTransaction").saveTransaction;
-const queryMessageFormatter = require("./queryTransaction")
-  .queryMessageFormatter;
-const queryTransaction = require("./queryTransaction").queryTransaction;
-const saveMessageFormatter = require("./saveTransaction").saveMessageFormatter;
+const { saveMessageFormatter, saveTransaction } = require("./saveTransaction");
+const {
+  queryMessageFormatter,
+  queryTransaction
+} = require("./queryTransaction");
 
 const displayMessage = function(
   userInputs,

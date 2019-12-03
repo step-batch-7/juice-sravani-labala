@@ -1,8 +1,7 @@
 const chai = require("chai");
 const assert = chai.assert;
 
-const validations = require("../src/processOperation");
-const { displayMessage, generateMsg } = validations;
+const { displayMessage, generateMsg } = require("../src/processOperation");
 
 describe("displayMessage", function() {
   it("should give 'request failed' if the inputs are not valid", function() {
@@ -17,6 +16,10 @@ describe("displayMessage", function() {
       assert.strictEqual(
         "./../dataFiles/testingTransactionFileQuery.json",
         path
+      );
+      assert.strictEqual(
+        data,
+        '[{"empId":"1","beverage": "apple", "qty": "2", "date": "01-01-2019" }]'
       );
       return "";
     };
@@ -56,6 +59,10 @@ describe("displayMessage", function() {
         "./../dataFiles/testingTransactionFileQuery.json",
         path
       );
+      assert.strictEqual(
+        data,
+        '[{"empId":"1","beverage": "apple", "qty": "2", "date": "01-01-2019" }]'
+      );
       return "";
     };
     assert.strictEqual(
@@ -71,7 +78,7 @@ describe("displayMessage", function() {
       "Employee ID, Beverage, Quantity, Date\n1,apple,2,2019-01-01\nTotal: 2 Juices"
     );
   });
-  it("should give the formatted message for the query operation if the total juices are one", function() {
+  it("should give the formatted message for the query operation if the total juices is one", function() {
     const readFile = function(path) {
       assert.strictEqual(
         "./../dataFiles/testingTransactionFileQuery.json",
@@ -93,6 +100,10 @@ describe("displayMessage", function() {
       assert.strictEqual(
         "./../dataFiles/testingTransactionFileQuery.json",
         path
+      );
+      assert.strictEqual(
+        data,
+        '[{"empId":"1","beverage": "apple", "qty": "2", "date": "01-01-2019" }]'
       );
       return "";
     };

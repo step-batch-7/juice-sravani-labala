@@ -1,23 +1,20 @@
-const utilities = require("./utilities");
-let { splitByTab, getPreviousTxns } = utilities;
+const { getPreviousTxns } = require("./utilities");
 
 const getQueryTransactionDetails = function(queryTransactionList, transaction) {
   queryTransactionList.transactionDetails += [
     transaction.empId,
     transaction.beverage,
     transaction.qty,
-    transaction.date,
-    "\n"
+    transaction.date + "\n"
   ];
-  queryTransactionList.totalSum += +transaction.qty;
+  queryTransactionList.totalJuices += +transaction.qty;
   return queryTransactionList;
 };
 
 const queryTransactionRecords = function(data) {
-  let juiceRecords = data.totalSum;
+  let juiceRecords = data.totalJuices;
   let transactionDetails = data.transactionDetails;
-  transactionDetails = transactionDetails.split(",\n");
-  transactionDetails = transactionDetails.map(splitByTab);
+  transactionDetails = transactionDetails.split("\n");
   transactionDetails.pop();
   return { totalJuice: juiceRecords, transactionDetails: transactionDetails };
 };
@@ -45,64 +42,29 @@ const isGivenOption = function(searchKey, searchedFor) {
   };
 };
 
-const getFilteredEmpTxns = function(userInput, transactionDatabase) {
-  const indexOfEmpId = userInput.indexOf("--empId");
-  const employeeId = userInput[indexOfEmpId + 1];
-  let filteredEmpTxns = transactionDatabase;
-  if (userInput.includes("--empId")) {
-    filteredEmpTxns = transactionDatabase.filter(
-      isGivenOption("empId", employeeId)
-    );
-  }
-  return filteredEmpTxns;
-};
-
-const getFilteredBeverageTxns = function(userInput, filteredEmpTxns) {
-  const indexOfBeverage = userInput.indexOf("--beverage");
-  const beverageName = userInput[indexOfBeverage + 1];
-  let filteredBeverageTxns = filteredEmpTxns;
-  if (userInput.includes("--beverage")) {
-    const beverageFinder = isGivenOption("beverage", beverageName);
-    filteredBeverageTxns = filteredEmpTxns.filter(beverageFinder);
-  }
-  return filteredBeverageTxns;
-};
-
-const getFilteredDateTxns = function(userInput, filteredBeverageTxns) {
-  const indexOfDate = userInput.indexOf("--date");
-  const date = userInput[indexOfDate + 1];
-  let filteredDateTxns = filteredBeverageTxns;
-  if (userInput.includes("--date")) {
-    dateFinder = isGivenOption("date", date);
-    filteredDateTxns = filteredBeverageTxns.filter(dateFinder);
-  }
-  return filteredDateTxns;
-};
-
 const queryTransaction = function(userInput, path, isFileExist, readFile) {
   let transactionDatabase = getPreviousTxns(isFileExist, readFile, path);
-  const filteredEmpTxns = getFilteredEmpTxns(userInput, transactionDatabase);
-  const filteredBeverageTxns = getFilteredBeverageTxns(
-    userInput,
-    filteredEmpTxns
-  );
-  const filteredDateTxns = getFilteredDateTxns(userInput, filteredBeverageTxns);
-  const concattedEmployeeTransactions = filteredDateTxns.reduce(
+  let filteredTxns = transactionDatabase;
+  for (let index = 0; index < userInput.length; index += 2) {
+    filteredTxns = filteredTxns.filter(
+      isGivenOption(userInput[index].slice(2), userInput[index + 1])
+    );
+  }
+  const concattedEmployeeTransactions = filteredTxns.reduce(
     getQueryTransactionDetails,
     {
       transactionDetails: "",
-      totalSum: 0
+      totalJuices: 0
     }
   );
   const records = queryTransactionRecords(concattedEmployeeTransactions);
   return records;
 };
 
-exports.queryTransaction = queryTransaction;
-exports.queryMessageFormatter = queryMessageFormatter;
-exports.getQueryTransactionDetails = getQueryTransactionDetails;
-exports.queryTransactionRecords = queryTransactionRecords;
-exports.isGivenOption = isGivenOption;
-exports.getFilteredEmpTxns = getFilteredEmpTxns;
-exports.getFilteredBeverageTxns = getFilteredBeverageTxns;
-exports.getFilteredDateTxns = getFilteredDateTxns;
+module.exports = {
+  queryTransaction,
+  queryMessageFormatter,
+  getQueryTransactionDetails,
+  queryTransactionRecords,
+  isGivenOption
+};

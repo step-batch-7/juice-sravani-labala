@@ -1,8 +1,5 @@
-const utilities = require("./utilities");
-let { addNewTransaction, getPreviousTxns } = utilities;
-
-const jsonUtilities = require("./jsonUtiities");
-let { objectToString } = jsonUtilities;
+const { addNewTransaction, getPreviousTxns } = require("./utilities");
+const { objectToString } = require("./jsonUtiities");
 
 const saveMessageFormatter = function(data) {
   let stringifiedData = `Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date\n${
@@ -47,7 +44,4 @@ const saveTransaction = function(
   return newRecord;
 };
 
-exports.saveTransaction = saveTransaction;
-exports.saveMessageFormatter = saveMessageFormatter;
-exports.getNewTxnRecord = getNewTxnRecord;
-exports.updateTxnRecords = updateTxnRecords;
+module.exports = { saveTransaction, saveMessageFormatter, getNewTxnRecord };

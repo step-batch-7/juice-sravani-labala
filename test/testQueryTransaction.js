@@ -1,21 +1,23 @@
 const chai = require("chai");
 const assert = chai.assert;
 
-const query = require("./../src/queryTransaction");
-let {
+const {
   queryTransaction,
   queryTransactionRecords,
   getQueryTransactionDetails,
   queryMessageFormatter,
-  isGivenOption,
-  getFilteredBeverageTxns,
-  getFilteredDateTxns,
-  getFilteredEmpTxns
-} = query;
+  isGivenOption
+} = require("./../src/queryTransaction");
 
 describe("isGivenOption", function() {
   it("should give the filtered option transactions", function() {
-    assert.strictEqual(isGivenOption("empId", "1"));
+    let txnData = [
+      { empId: "1", beverage: "apple", qty: "2" },
+      { empId: "2", beverage: "orange", qty: "1" }
+    ];
+    assert.deepStrictEqual(txnData.filter(isGivenOption("empId", "1")), [
+      { empId: "1", beverage: "apple", qty: "2" }
+    ]);
   });
 });
 
@@ -37,7 +39,7 @@ describe("queryTransaction", function() {
     };
     let expected = {
       totalJuice: 2,
-      transactionDetails: [["1,apple,2,01-01-2019"]]
+      transactionDetails: ["1,apple,2,01-01-2019"]
     };
     assert.deepStrictEqual(
       queryTransaction(
@@ -66,7 +68,7 @@ describe("queryTransaction", function() {
     };
     let expected = {
       totalJuice: 2,
-      transactionDetails: [["1,apple,2,01-01-2019"]]
+      transactionDetails: ["1,apple,2,01-01-2019"]
     };
     assert.deepStrictEqual(
       queryTransaction(
@@ -95,7 +97,7 @@ describe("queryTransaction", function() {
     };
     let expected = {
       totalJuice: 2,
-      transactionDetails: [["1,apple,2,01-01-2019"]]
+      transactionDetails: ["1,apple,2,01-01-2019"]
     };
     assert.deepStrictEqual(
       queryTransaction(
@@ -112,24 +114,24 @@ describe("queryTransaction", function() {
 describe("getQueryTransactionDetails", function() {
   it("should give all the transaction details as a single string format as well as number of juices", function() {
     let details = { empId: "1", beverage: "apple", qty: "2", date: "123" };
-    let emptyTransaction = { transactionDetails: "", totalSum: 0 };
+    let emptyTransaction = { transactionDetails: "", totalJuices: 0 };
     let actual = getQueryTransactionDetails(emptyTransaction, details);
     assert.deepStrictEqual(actual, {
-      transactionDetails: "1,apple,2,123,\n",
-      totalSum: 2
+      transactionDetails: "1,apple,2,123\n",
+      totalJuices: 2
     });
   });
 });
 
 describe("queryTransactionRecords", function() {
   let details = {
-    transactionDetails: "1,apple,2,123,\n",
-    totalSum: 14
+    transactionDetails: "1,apple,2,123\n",
+    totalJuices: 14
   };
-  it("should return the total number of juices they have taken and transaction in formatted way", function() {
+  it("should give the total number of juices they have taken and transaction in formatted way", function() {
     assert.deepStrictEqual(queryTransactionRecords(details), {
       totalJuice: 14,
-      transactionDetails: [["1,apple,2,123"]]
+      transactionDetails: ["1,apple,2,123"]
     });
   });
 });
@@ -139,14 +141,13 @@ describe("queryMessageFormatter", function() {
     totalJuice: 14,
     transactionDetails: [["123", "apple", "2", "1-2-3"]]
   };
-  // let expectedInput = [details];
   it("should format given transactions if the transactions are given", function() {
     assert.strictEqual(
       queryMessageFormatter(details),
       "Employee ID, Beverage, Quantity, Date\n123,apple,2,1-2-3\nTotal: 14 Juices"
     );
   });
-  it("should return 'records not found' if no transactions are present", function() {
+  it("should give 'records not found' if no transactions are present", function() {
     assert.strictEqual(queryMessageFormatter(0), "records not found");
   });
 });

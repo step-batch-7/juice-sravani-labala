@@ -1,8 +1,11 @@
 const chai = require("chai");
 const assert = chai.assert;
 
-const fileUtilities = require("../src/fileAccessUtility");
-let { readFile, writeFile, isFileExist } = fileUtilities;
+const {
+  readFile,
+  writeFile,
+  isFileExist
+} = require("../src/fileAccessUtility");
 
 describe("readFile", function() {
   it("should give the contents present in the file in the form of the object", function() {

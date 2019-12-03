@@ -1,16 +1,15 @@
-const utilities = require("../src/utilities");
-let {
+const chai = require("chai");
+const assert = chai.assert;
+
+const {
   addNewTransaction,
-  splitByTab,
   isEqual,
   isInclude,
   isNumeric,
   getNumeric,
   isPositiveNumeric,
   getPreviousTxns
-} = utilities;
-const chai = require("chai");
-const assert = chai.assert;
+} = require("../src/utilities");
 
 describe("getPreviousTxns", function() {
   it("should give previous txns database if it exists", function() {
@@ -108,31 +107,31 @@ describe("isNumeric", function() {
   });
 });
 
-describe("splitByTab", function() {
-  it("should split the content by tab", function() {
-    assert.deepStrictEqual(splitByTab("123\torange\t3"), [
-      "123",
-      "orange",
-      "3"
-    ]);
-  });
-});
-
 describe("addNewTransaction", function() {
   it("should add a new employ id to transaction data", function() {
-    let date = "1-2-3";
-    let newRecord = { empId: "1", beverage: "orange", qty: "2", date: date };
+    let newRecord = {
+      empId: "1",
+      beverage: "orange",
+      qty: "2",
+      date: "2019-01-01"
+    };
     assert.deepStrictEqual(addNewTransaction(newRecord, []), [
-      { empId: "1", beverage: "orange", qty: "2", date: date }
+      { empId: "1", beverage: "orange", qty: "2", date: "2019-01-01" }
     ]);
   });
   it("should update an existing employ id with given transactions", function() {
-    let data = [{ empId: "1", beverage: "orange", qty: "1", date: "123" }];
-    let date = "1-2-3";
-    let newRecord = { empId: "1", beverage: "apple", qty: "2", date: date };
+    let data = [
+      { empId: "1", beverage: "orange", qty: "1", date: "2019-01-01" }
+    ];
+    let newRecord = {
+      empId: "1",
+      beverage: "apple",
+      qty: "2",
+      date: "2019-02-02"
+    };
     assert.deepStrictEqual(addNewTransaction(newRecord, data), [
-      { empId: "1", beverage: "orange", qty: "1", date: "123" },
-      { empId: "1", beverage: "apple", qty: "2", date: date }
+      { empId: "1", beverage: "orange", qty: "1", date: "2019-01-01" },
+      { empId: "1", beverage: "apple", qty: "2", date: "2019-02-02" }
     ]);
   });
 });

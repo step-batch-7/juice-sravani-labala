@@ -1,10 +1,8 @@
-const isInputsValid = require("./src/inputChecking").isInputsValid;
-
-const fileAccess = require("./src/fileAccessUtility");
-let { readFile, writeFile, isFileExist } = fileAccess;
 const { timeStamp, getDataStorePath } = require("./src/config");
-
+const { readFile, writeFile, isFileExist } = require("./src/fileAccessUtility");
+const isInputsValid = require("./src/inputChecking").isInputsValid;
 const displayMessage = require("./src/processOperation").displayMessage;
+
 const main = function() {
   const path = getDataStorePath(process.env);
   const timeStampWithEnv = timeStamp.bind(null, process.env);

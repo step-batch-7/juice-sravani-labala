@@ -1,7 +1,6 @@
 const chai = require("chai");
 const assert = chai.assert;
-const jsonUtilities = require("../src/jsonUtiities");
-let { stringToObject, objectToString } = jsonUtilities;
+const { stringToObject, objectToString } = require("../src/jsonUtiities");
 
 describe("stringToObject", function() {
   it("should convert the given string to object", function() {

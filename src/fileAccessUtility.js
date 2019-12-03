@@ -1,4 +1,5 @@
 const fs = require("fs");
+
 const isFileExist = function(path) {
   return fs.existsSync(path);
 };
@@ -12,6 +13,4 @@ const writeFile = function(path, transactionDatabase) {
   fs.writeFileSync(path, transactionDatabase, "utf8");
 };
 
-exports.readFile = readFile;
-exports.writeFile = writeFile;
-exports.isFileExist = isFileExist;
+module.exports = { readFile, writeFile, isFileExist };

@@ -1,4 +1,6 @@
-const assert = require("assert");
+const chai = require("chai");
+const assert = chai.assert;
+
 const { getDataStorePath, timeStamp } = require("../src/config");
 
 describe("getDataStorePath", function() {
@@ -14,6 +16,7 @@ describe("getDataStorePath", function() {
     );
   });
 });
+
 describe("timeStamp", function() {
   it("should give current time by default", function() {
     assert.deepStrictEqual(timeStamp({}), new Date());
