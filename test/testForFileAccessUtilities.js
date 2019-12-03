@@ -8,23 +8,24 @@ const {
 } = require("../src/fileAccessUtility");
 
 describe("readFile", function() {
-  it("should give the contents present in the file in the form of the object", function() {
-    assert.strictEqual(readFile("./dataFiles/testFileForRead.json"), "hello\n");
+  it("Should read given File", function() {
+    writeFile("./dataFiles/testFileForRead", "hello");
+    assert.strictEqual(readFile("./dataFiles/testFileForRead"), "hello");
   });
 });
 
 describe("writeFile", function() {
-  it("should write the given contents to the file in the form of string", function() {
-    writeFile("./dataFiles/testFileForWrite.json", "hi");
-    assert.strictEqual(readFile("./dataFiles/testFileForWrite.json"), "hi");
+  it("Should write to the given file", function() {
+    writeFile("./dataFiles/testFileForWrite", "hello");
+    assert.strictEqual(readFile("./dataFiles/testFileForWrite"), "hello");
   });
 });
 
-describe("isFileExists", function() {
-  it("should give true if the given file exist", function() {
-    assert.ok(isFileExist("./dataFiles/testFileForRead.json"));
+describe("isFileExist", function() {
+  it("Should validate if file is present", function() {
+    assert.ok(isFileExist("./beverage.js"));
   });
-  it("should give false if the file doesn't exist", function() {
-    assert.notOk(isFileExist("./src/transact"));
+  it("Should validate if file is not present", function() {
+    assert.notOk(isFileExist("./noFile"));
   });
 });
